@@ -1,4 +1,4 @@
-package articulos;
+package Actividad;
 
 import java.io.Serializable;
 import java.util.Objects;

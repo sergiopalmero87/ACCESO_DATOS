@@ -1,4 +1,4 @@
-package main;
+package Actividad;
 
 
 import java.io.EOFException;
@@ -13,9 +13,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import articulos.Articulos;
-import escrituraFichero.EscrituraFichero;
 
 public class Main {
 	 

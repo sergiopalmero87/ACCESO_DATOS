@@ -1,33 +1,37 @@
 package Actividad;
 
 import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LecturaFichero { //Con EndOfLine
+public class LecturaFichero { // Con EndOfLine
+	
+	static List<Articulos> coleccionArticulos = new ArrayList<>();
 
-	public static void main(String[] args) {
+	public static List<Articulos> leerFichero(File fichero) {
+
 		// Abrimos fichero agenda.dat para lectura
-		try (FileInputStream file = new FileInputStream(EscrituraFichero.NOMBRE_FICHERO);
+		try (FileInputStream file = new FileInputStream(fichero);
 				ObjectInputStream buffer = new ObjectInputStream(file);) {
 			// Leemos la lista de articulos
-			//Utilizamos bandera para saber si estamos al final de la linea
+			// Utilizamos bandera para saber si estamos al final de la linea
 			boolean eof = false;
-			
-			//Creamos objeto donde guardar lo que leemos del archivo
+
+			// Creamos objeto donde guardar lo que leemos del archivo
 			Articulos articulo = new Articulos();
-			
-			//Mientras que no sea el final de la linea
+
+			// Mientras que no sea el final de la linea
 			while (!eof) {
 				try {
 					articulo = (Articulos) buffer.readObject();
 					// puede arrojar excepciones de tipo EOFException
 					// en caso de que no haya mas objetos que leer
 					// es decir, estamos en EOF (End Of File)
-					System.out.println("El contenido del fichero es: " + articulo);
+					coleccionArticulos.add(articulo);
 				} catch (EOFException e1) {// si salta esta excepcion, es que hemos llegado a EOF
 					eof = true;
 					// break;
@@ -40,11 +44,13 @@ public class LecturaFichero { //Con EndOfLine
 				}
 			}
 		} catch (IOException e) {
-			System.out.println("No se ha podido leer el contenido del archivo. "
-					+ "¿El archivo existe?");
+			System.out.println("No se ha podido leer el contenido del archivo. " + "¿El archivo existe?");
 			System.out.println(e.getMessage());
-			return;
+			
 		}
+		
+		return coleccionArticulos;
+
 	}
-	
+
 }

@@ -1,110 +1,243 @@
 package Actividad;
 
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
-	static List<Articulos> coleccionArticulos = new ArrayList<Articulos>();
-	static File file = new File(EscrituraFichero.NOMBRE_FICHERO);
-	static LecturaFichero leer = new LecturaFichero();
-	static EscrituraFichero escribir = new EscrituraFichero();
+	private static Scanner sc = new Scanner(System.in);
+	public static String NOMBRE_FICHERO = "articulos.dat";
+	private static File file = new File(NOMBRE_FICHERO);
+	private static List<Articulos> coleccionArticulos = new ArrayList<>();
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws FileNotFoundException, IOException {
 
-		Articulos articulo = new Articulos();
-		int opcion = 0;
-
-		// Averiguamos si el fichero articulos.dat existe.
 		if (!file.exists()) {
-			// Si no exite dejamos el ArrayList vacio
-			System.out.println("El fichero no existe.");
 			coleccionArticulos = new ArrayList<Articulos>();
 
+			System.out.print("El fichero no existe. ¿Quieres crear uno?: Si / No --> ");
+			String respuesta = sc.nextLine();
+
+			if (respuesta.equalsIgnoreCase("si")) {
+				menu();
+
+			} else {
+				System.out.println("Cerrando el programa. Adiós.");
+				return;
+			}
+
 		} else {
-			System.out.println("Leyendo el fichero " + file.getName());
-			System.out.println(leer.leerFichero(file));
-			 
+			System.out.println("El fichero existe, vamos a leerlo:");
+			coleccionArticulos = cargarColeccionDesdeFichero(file);
+			menu();
 		}
 
 	}
 
+	private static List<Articulos> cargarColeccionDesdeFichero(File file) {
 
-	// Menu
-	public static void menu(int opcion) {
+		// Creamos una lista aux en la que cargamos los datos del fichero
+		List<Articulos> coleccionArticulos = new ArrayList<>();
+
+		// Abrimos fichero para lectura
+		try (FileInputStream fis = new FileInputStream(file); ObjectInputStream ois = new ObjectInputStream(fis)) {
+
+			try {
+				// en la coleccion escribimos los datos del fichero
+				// hay que castearlo
+				coleccionArticulos = (List<Articulos>) ois.readObject();
+
+				// foreach de articulos en la coleccion y los imprimimos
+				for (Articulos a : coleccionArticulos) {
+					System.out.println(a);
+				}
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
+			System.out.println("No se ha podido abrir el fichero");
+			System.out.println(e.getMessage());
+		}
+		return coleccionArticulos;
+
+	}
+
+	private static void guardarColeccionEnFichero() {
+		//Escribimos en fichero. 
+		//Con el objeto oos escribimos en el fichero lo que contengan los parentesis.
+		//en este caso escribimos en el fichero la coleccion de articulos.
+		try (FileOutputStream fos = new FileOutputStream(file); 
+				ObjectOutputStream oos = new ObjectOutputStream(fos);) {
+			oos.writeObject(coleccionArticulos);
+			System.out.println("Fichero guardado correctamente.");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void menu() {
+		Scanner scanner = new Scanner(System.in);
+		int opcion;
+
+		do {
+			System.out.println("\n*** Menú ***");
+			System.out.println("1. Añadir nuevo artículo");
+			System.out.println("2. Borrar artículo por id");
+			System.out.println("3. Consultar artículo por id");
+			System.out.println("4. Listado de todos los artículos");
+			System.out.println("5. Exportar artículos a archivo CSV");
+			System.out.println("6. Terminar el programa y crear el fichero");
+			System.out.print("Seleccione una opción: ");
+
+			opcion = scanner.nextInt();
+			scanner.nextLine();
+
+			switch (opcion) {
+			case 1:
+				agregarArticulo(file, coleccionArticulos);
+				break;
+			case 2:
+				borrarArticuloPorId();
+				break;
+			case 3:
+				consultarArticuloPorId();
+				break;
+			case 4:
+				listarArticulos();
+				break;
+			case 5:
+				exportarACSV();
+				break;
+			case 6:
+				System.out.println("Terminando el programa y creando el fichero...");
+				guardarColeccionEnFichero();
+				return;
+			default:
+				System.out.println("Opción no válida. Inténtelo de nuevo.");
+			}
+
+		} while (opcion != 6);
+	}
+
+	private static void agregarArticulo(File file, List<Articulos> coleccionArticulos) {
 		Scanner sc = new Scanner(System.in);
 
-		System.out.println("Elige que quieres hacer: \n");
-		System.out.println("Opcion 1: Añadir nuevo artículo");
-		System.out.println("Opcion 2: Borrar artículo por id");
-		System.out.println("Opcion 3: Consulta artículo por id");
-		System.out.println("Opcion 4: Consulta artículo por id");
-		System.out.println("Opcion 5: Exportar artículos a archivo CSV");
-		System.out.println("Opcion 6: Salir del programa");
-
-		opcion = sc.nextInt();
-
-		switch (opcion) {
-
-		case 1: // Añadir nuevo articulo
-			Articulos nuevoArticulo = new Articulos();
-			// New ID
-			System.out.println("ID:");
-			int id = sc.nextInt();
+		System.out.println("Ingrese los datos del nuevo artículo:");
+		int id;
+		do {
+			System.out.print("ID: ");
+			id = sc.nextInt();
 			sc.nextLine();
-			nuevoArticulo.setId(id);
+			//Llamamos a la funcion para comprobar id. 
+			//Si ya existe se repite el bucle y avisamos al usuario. 
+			//Una vez que el id sea distinto entramos.
+			if (existeArticuloConId(id)) {
+				System.out.println("Ya existe un artículo con ese ID. Inténtelo de nuevo.");
+			}
+		} while (existeArticuloConId(id));
 
-			// New Name
-			System.out.println("NAME:");
-			String name = sc.nextLine();
-			nuevoArticulo.setName(name);
+		System.out.println("NAME:");
+		String name = sc.nextLine();
 
-			// New Description
-			System.out.println("DESCRIPTION:");
-			String description = sc.nextLine();
-			nuevoArticulo.setDescription(description);
+		System.out.println("DESCRIPTION:");
+		String description = sc.nextLine();
 
-			// New Stock
-			System.out.println("STOCK:");
-			int stock = sc.nextInt();
-			sc.nextLine();
-			nuevoArticulo.setStock(stock);
+		System.out.println("PRICE:");
+		double price = sc.nextDouble();
 
-			// New price
-			System.out.println("PRICE:");
-			double price = sc.nextDouble();
-			nuevoArticulo.setPrice(price);
+		System.out.println("STOCK:");
+		int stock = sc.nextInt();
+		sc.nextLine();
 
-			System.out.println("\nEl nuevo articulo creado es: " + nuevoArticulo + "\n");
-			// coleccionArticulos = escribir.escribirFichero(nuevoArticulo,
-			// coleccionArticulos);
+		Articulos nuevoArticulo = new Articulos(id, name, description, price, stock);
+		coleccionArticulos.add(nuevoArticulo);
+		System.out.println("Objeto guardado");
 
-			break;
+	}
 
-		case 2: // Borrar articulo por ID
-			break;
+	private static void borrarArticuloPorId() {
+		Scanner scanner = new Scanner(System.in);
 
-		case 3: // Consultar articulo por ID
-			break;
+		System.out.print("Ingrese el ID del artículo a borrar: ");
+		int idBorrar = scanner.nextInt();
+		scanner.nextLine();
 
-		case 4: // Listar articulos
-			break;
+		for (Articulos a : coleccionArticulos) {
 
-		case 5: // Terminar programa
-			break;
+			if (a.getId() == idBorrar) {
+				System.out.println("Articulo borrado: " + a);
+				coleccionArticulos.remove(a);
 
-		default: // Mostrar error
+			}
 
+		}
+	}
+
+	private static void consultarArticuloPorId() {
+		Scanner scanner = new Scanner(System.in);
+
+		System.out.print("Ingrese el ID del artículo a consultar: ");
+		int idConsultar = scanner.nextInt();
+		scanner.nextLine();
+
+		for (Articulos articulo : coleccionArticulos) {
+			if (articulo.getId() == idConsultar) {
+				System.out.println(articulo);
+				return;
+			}
+		}
+
+		System.out.println("No se encontró ningún artículo con ese ID.");
+	}
+
+	private static void listarArticulos() {
+		System.out.println("Listado de todos los artículos:");
+		if (!coleccionArticulos.isEmpty()) {
+			for (Articulos articulo : coleccionArticulos) {
+				System.out.println(articulo);
+			}
+		} else {
+			System.out.println("La colección está vacia " + coleccionArticulos);
 		}
 
 	}
 
+	// Comprobamos que los id no sean iguales//Comprobamos mediante un boolean si el id existe.
+	private static boolean existeArticuloConId(int id) {
+		for (Articulos articulo : coleccionArticulos) {
+			if (articulo.getId() == id) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	// Exportar a CSV
+	private static void exportarACSV() {
+		// Con printWriter escribimos en el archivo "articulos.csv"
+		try (PrintWriter writer = new PrintWriter(new File("articulos.csv"))) {
+
+			// Con StringBuilder creamos una cadena y añadimos los datos:
+			StringBuilder sb = new StringBuilder();
+			sb.append("ID,Nombre,Descripción,Precio,Stock\n");
+
+			// Hacemos un foreach de articulos en la coleccion
+			for (Articulos articulo : coleccionArticulos) {
+				sb.append(articulo.getId()).append(",").append(articulo.getName()).append(",")
+						.append(articulo.getDescription()).append(",").append(articulo.getPrice()).append(",")
+						.append(articulo.getStock()).append("\n");
+			}
+
+			// Con el metodo write de la clase PrintWriter, escribimos lo que hay en el
+			// StringBuilder
+			// al archivo CSV
+			writer.write(sb.toString());
+			System.out.println("Exportación a CSV completada correctamente.");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 }

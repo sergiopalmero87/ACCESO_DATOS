@@ -12,6 +12,7 @@ public class Main {
 	public static String NOMBRE_FICHERO = "articulos.dat";
 	private static File file = new File(NOMBRE_FICHERO);
 	private static List<Articulos> coleccionArticulos = new ArrayList<>();
+	static ExportarCSV exportar;
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 
@@ -30,7 +31,7 @@ public class Main {
 			}
 
 		} else {
-			System.out.println("El fichero existe, vamos a leerlo:");
+			System.out.println("El fichero " + NOMBRE_FICHERO + " existe, vamos a leerlo:");
 			coleccionArticulos = cargarColeccionDesdeFichero(file);
 			menu();
 		}
@@ -43,12 +44,19 @@ public class Main {
 		List<Articulos> coleccionArticulos = new ArrayList<>();
 
 		// Abrimos fichero para lectura
-		try (FileInputStream fis = new FileInputStream(file); ObjectInputStream ois = new ObjectInputStream(fis)) {
+		// fis crea un canal de comunicación con el file, 
+		// ois es lo que lee de fis y luego lo guardamos en coleccionArticulos 
+		try (FileInputStream fis = new FileInputStream(file); 
+				ObjectInputStream ois = new ObjectInputStream(fis)) {
 
 			try {
 				// en la coleccion escribimos los datos del fichero
 				// hay que castearlo
 				coleccionArticulos = (List<Articulos>) ois.readObject();
+				
+				if(coleccionArticulos.isEmpty()) {
+					System.out.println("El fichero existe pero está vacio.");
+				}
 
 				// foreach de articulos en la coleccion y los imprimimos
 				for (Articulos a : coleccionArticulos) {
@@ -72,7 +80,7 @@ public class Main {
 		try (FileOutputStream fos = new FileOutputStream(file); 
 				ObjectOutputStream oos = new ObjectOutputStream(fos);) {
 			oos.writeObject(coleccionArticulos);
-			System.out.println("Fichero guardado correctamente.");
+			System.out.println("Fichero creado y guardado correctamente.");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -109,11 +117,11 @@ public class Main {
 				listarArticulos();
 				break;
 			case 5:
-				exportarACSV();
+				exportar.exportarACSV(coleccionArticulos);
 				break;
 			case 6:
-				System.out.println("Terminando el programa y creando el fichero...");
 				guardarColeccionEnFichero();
+				System.out.println("Fin del programa.");
 				return;
 			default:
 				System.out.println("Opción no válida. Inténtelo de nuevo.");
@@ -160,6 +168,11 @@ public class Main {
 
 	private static void borrarArticuloPorId() {
 		Scanner scanner = new Scanner(System.in);
+		
+		if(coleccionArticulos.isEmpty()) {
+			System.out.println("Todavia no hay ningun articulo guardado");
+			return;
+		}
 
 		System.out.print("Ingrese el ID del artículo a borrar: ");
 		int idBorrar = scanner.nextInt();
@@ -170,10 +183,11 @@ public class Main {
 			if (a.getId() == idBorrar) {
 				System.out.println("Articulo borrado: " + a);
 				coleccionArticulos.remove(a);
-
+				return;
 			}
 
 		}
+
 	}
 
 	private static void consultarArticuloPorId() {
@@ -205,7 +219,8 @@ public class Main {
 
 	}
 
-	// Comprobamos que los id no sean iguales//Comprobamos mediante un boolean si el id existe.
+	// Comprobamos que los id no sean iguales
+	//Comprobamos mediante un boolean si el id existe.
 	private static boolean existeArticuloConId(int id) {
 		for (Articulos articulo : coleccionArticulos) {
 			if (articulo.getId() == id) {
@@ -213,31 +228,5 @@ public class Main {
 			}
 		}
 		return false;
-	}
-
-	// Exportar a CSV
-	private static void exportarACSV() {
-		// Con printWriter escribimos en el archivo "articulos.csv"
-		try (PrintWriter writer = new PrintWriter(new File("articulos.csv"))) {
-
-			// Con StringBuilder creamos una cadena y añadimos los datos:
-			StringBuilder sb = new StringBuilder();
-			sb.append("ID,Nombre,Descripción,Precio,Stock\n");
-
-			// Hacemos un foreach de articulos en la coleccion
-			for (Articulos articulo : coleccionArticulos) {
-				sb.append(articulo.getId()).append(",").append(articulo.getName()).append(",")
-						.append(articulo.getDescription()).append(",").append(articulo.getPrice()).append(",")
-						.append(articulo.getStock()).append("\n");
-			}
-
-			// Con el metodo write de la clase PrintWriter, escribimos lo que hay en el
-			// StringBuilder
-			// al archivo CSV
-			writer.write(sb.toString());
-			System.out.println("Exportación a CSV completada correctamente.");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
 	}
 }

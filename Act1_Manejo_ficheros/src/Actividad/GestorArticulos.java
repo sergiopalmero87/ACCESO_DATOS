@@ -17,7 +17,6 @@ public class GestorArticulos {
 	public static String NOMBRE_FICHERO = "articulos.dat";
 	private static File file = new File(NOMBRE_FICHERO);
 	private static List<Articulos> coleccionArticulos = new ArrayList<>();
-	static ExportarCSV exportar = new ExportarCSV();
 	
 	/**
 	 * Carga una colección de artículos desde un archivo.

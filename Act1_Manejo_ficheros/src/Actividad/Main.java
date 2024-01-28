@@ -13,8 +13,10 @@ public class Main {
 	private static File file = new File(NOMBRE_FICHERO);
 	private static List<Articulos> coleccionArticulos = new ArrayList<>();
 	static ExportarCSV exportar;
+	static GestorArticulos gestor = new GestorArticulos();
 
-	public static void main(String[] args) throws FileNotFoundException, IOException {
+	
+	public static void main(String[] args){
 
 		if (!file.exists()) {
 			coleccionArticulos = new ArrayList<Articulos>();
@@ -32,61 +34,17 @@ public class Main {
 
 		} else {
 			System.out.println("El fichero " + NOMBRE_FICHERO + " existe, vamos a leerlo:");
-			coleccionArticulos = cargarColeccionDesdeFichero(file);
+			coleccionArticulos = gestor.cargarColeccionDesdeFichero(file);
 			menu();
 		}
 
 	}
 
-	private static List<Articulos> cargarColeccionDesdeFichero(File file) {
-
-		// Creamos una lista aux en la que cargamos los datos del fichero
-		List<Articulos> coleccionArticulos = new ArrayList<>();
-
-		// Abrimos fichero para lectura
-		// fis crea un canal de comunicación con el file, 
-		// ois es lo que lee de fis y luego lo guardamos en coleccionArticulos 
-		try (FileInputStream fis = new FileInputStream(file); 
-				ObjectInputStream ois = new ObjectInputStream(fis)) {
-
-			try {
-				// en la coleccion escribimos los datos del fichero
-				// hay que castearlo
-				coleccionArticulos = (List<Articulos>) ois.readObject();
-				
-				if(coleccionArticulos.isEmpty()) {
-					System.out.println("El fichero existe pero está vacio.");
-				}
-
-				// foreach de articulos en la coleccion y los imprimimos
-				for (Articulos a : coleccionArticulos) {
-					System.out.println(a);
-				}
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-		} catch (IOException e) {
-			System.out.println("No se ha podido abrir el fichero");
-			System.out.println(e.getMessage());
-		}
-		return coleccionArticulos;
-
-	}
-
-	private static void guardarColeccionEnFichero() {
-		//Escribimos en fichero. 
-		//Con el objeto oos escribimos en el fichero lo que contengan los parentesis.
-		//en este caso escribimos en el fichero la coleccion de articulos.
-		try (FileOutputStream fos = new FileOutputStream(file); 
-				ObjectOutputStream oos = new ObjectOutputStream(fos);) {
-			oos.writeObject(coleccionArticulos);
-			System.out.println("Fichero creado y guardado correctamente.");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private static void menu() {
+	
+	/**
+	 * Muestra un menú de opciones y realiza acciones según la selección del usuario.
+	 */
+	public static void menu() {
 		Scanner scanner = new Scanner(System.in);
 		int opcion;
 
@@ -105,22 +63,22 @@ public class Main {
 
 			switch (opcion) {
 			case 1:
-				agregarArticulo(file, coleccionArticulos);
+				gestor.agregarArticulo(file, coleccionArticulos);
 				break;
 			case 2:
-				borrarArticuloPorId();
+				gestor.borrarArticuloPorId();
 				break;
 			case 3:
-				consultarArticuloPorId();
+				gestor.consultarArticuloPorId();
 				break;
 			case 4:
-				listarArticulos();
+				gestor.listarArticulos();
 				break;
 			case 5:
 				exportar.exportarACSV(coleccionArticulos);
 				break;
 			case 6:
-				guardarColeccionEnFichero();
+				gestor.guardarColeccionEnFichero();
 				System.out.println("Fin del programa.");
 				return;
 			default:
@@ -128,105 +86,8 @@ public class Main {
 			}
 
 		} while (opcion != 6);
+		scanner.close();
 	}
-
-	private static void agregarArticulo(File file, List<Articulos> coleccionArticulos) {
-		Scanner sc = new Scanner(System.in);
-
-		System.out.println("Ingrese los datos del nuevo artículo:");
-		int id;
-		do {
-			System.out.print("ID: ");
-			id = sc.nextInt();
-			sc.nextLine();
-			//Llamamos a la funcion para comprobar id. 
-			//Si ya existe se repite el bucle y avisamos al usuario. 
-			//Una vez que el id sea distinto entramos.
-			if (existeArticuloConId(id)) {
-				System.out.println("Ya existe un artículo con ese ID. Inténtelo de nuevo.");
-			}
-		} while (existeArticuloConId(id));
-
-		System.out.println("NAME:");
-		String name = sc.nextLine();
-
-		System.out.println("DESCRIPTION:");
-		String description = sc.nextLine();
-
-		System.out.println("PRICE:");
-		double price = sc.nextDouble();
-
-		System.out.println("STOCK:");
-		int stock = sc.nextInt();
-		sc.nextLine();
-
-		Articulos nuevoArticulo = new Articulos(id, name, description, price, stock);
-		coleccionArticulos.add(nuevoArticulo);
-		System.out.println("Objeto guardado");
-
-	}
-
-	private static void borrarArticuloPorId() {
-		Scanner scanner = new Scanner(System.in);
-		
-		if(coleccionArticulos.isEmpty()) {
-			System.out.println("Todavia no hay ningun articulo guardado");
-			return;
-		}
-
-		System.out.print("Ingrese el ID del artículo a borrar: ");
-		int idBorrar = scanner.nextInt();
-		scanner.nextLine();
-
-		for (Articulos a : coleccionArticulos) {
-
-			if (a.getId() == idBorrar) {
-				System.out.println("Articulo borrado: " + a);
-				coleccionArticulos.remove(a);
-				return;
-			}
-
-		}
-
-	}
-
-	private static void consultarArticuloPorId() {
-		Scanner scanner = new Scanner(System.in);
-
-		System.out.print("Ingrese el ID del artículo a consultar: ");
-		int idConsultar = scanner.nextInt();
-		scanner.nextLine();
-
-		for (Articulos articulo : coleccionArticulos) {
-			if (articulo.getId() == idConsultar) {
-				System.out.println(articulo);
-				return;
-			}
-		}
-
-		System.out.println("No se encontró ningún artículo con ese ID.");
-	}
-
-	private static void listarArticulos() {
-		System.out.println("Listado de todos los artículos:");
-		if (!coleccionArticulos.isEmpty()) {
-			for (Articulos articulo : coleccionArticulos) {
-				System.out.println(articulo);
-			}
-		} else {
-			System.out.println("La colección está vacia " + coleccionArticulos);
-		}
-
-	}
-
-	// Comprobamos que los id no sean iguales
-	//Comprobamos mediante un boolean si el id existe.
-	private static boolean existeArticuloConId(int id) {
-		for (Articulos articulo : coleccionArticulos) {
-			if (articulo.getId() == id) {
-				return true;
-			}
-		}
-		return false;
-	}
+	
+	
 }

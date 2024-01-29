@@ -18,16 +18,17 @@ public class GestorArticulos {
 	private static File file = new File(NOMBRE_FICHERO);
 	private static List<Articulos> coleccionArticulos = new ArrayList<>();
 	
+	
+	
 	/**
 	 * Carga una colección de artículos desde un archivo.
 	 *
-	 * @param file El archivo desde el cual cargar la colección.
 	 * @return Una lista de artículos cargada desde el archivo.
 	 */
-	public List<Articulos> cargarColeccionDesdeFichero(File file) {
+	public List<Articulos> cargarColeccionDesdeFichero() {
 
 		// Creamos una lista aux en la que cargamos los datos del fichero
-		List<Articulos> coleccionArticulos = new ArrayList<>();
+		coleccionArticulos = new ArrayList<>();
 
 		// Abrimos fichero para lectura
 		// fis crea un canal de comunicación con el file, 
@@ -83,9 +84,8 @@ public class GestorArticulos {
 	 * Agrega un nuevo artículo a la colección.
 	 *
 	 * @param file El archivo en el cual se guarda la colección.
-	 * @param coleccionArticulos La colección de artículos a la que se agregará el nuevo artículo.
 	 */
-	public void agregarArticulo(File file, List<Articulos> coleccionArticulos) {
+	public void agregarArticulo(File file) {
 		Scanner sc = new Scanner(System.in);
 
 		System.out.println("Ingrese los datos del nuevo artículo:");

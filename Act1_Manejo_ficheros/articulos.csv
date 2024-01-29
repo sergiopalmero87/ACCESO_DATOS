@@ -1,4 +1,5 @@
 ID,Nombre,Descripción,Precio,Stock
-1,leche,leche,5.0,12
-2,sopa,sopa,4.0,10
-3,cafe,cafe,5.0,14
+1,sopa,sopa,12.0,1
+2,leche,leche,12.0,2
+3,cafe,cafe,12.0,3
+4,callos,callos,12.0,4

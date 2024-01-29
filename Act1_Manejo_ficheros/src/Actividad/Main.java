@@ -12,11 +12,13 @@ public class Main {
 	public static String NOMBRE_FICHERO = "articulos.dat";
 	private static File file = new File(NOMBRE_FICHERO);
 	private static List<Articulos> coleccionArticulos = new ArrayList<>();
-	static ExportarCSV exportar;
+	static ExportarCSV exportar = new ExportarCSV();
 	static GestorArticulos gestor = new GestorArticulos();
 
 	
 	public static void main(String[] args){
+		
+		
 
 		if (!file.exists()) {
 			coleccionArticulos = new ArrayList<Articulos>();
@@ -34,7 +36,7 @@ public class Main {
 
 		} else {
 			System.out.println("El fichero " + NOMBRE_FICHERO + " existe, vamos a leerlo:");
-			coleccionArticulos = gestor.cargarColeccionDesdeFichero(file);
+			coleccionArticulos = gestor.cargarColeccionDesdeFichero();
 			menu();
 		}
 
@@ -63,7 +65,7 @@ public class Main {
 
 			switch (opcion) {
 			case 1:
-				gestor.agregarArticulo(file, coleccionArticulos);
+				gestor.agregarArticulo(file);
 				break;
 			case 2:
 				gestor.borrarArticuloPorId();

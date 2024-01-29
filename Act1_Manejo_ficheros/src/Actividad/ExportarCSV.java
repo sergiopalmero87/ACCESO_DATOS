@@ -7,9 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExportarCSV {
-
 	// Exportar a CSV (Comma-separeted value)
 	// Separar por comas
+	
+	
 
 	/**
 	 * Exporta la colección de artículos a un archivo CSV.
@@ -17,6 +18,7 @@ public class ExportarCSV {
 	 * @param coleccionArticulos La colección de artículos a exportar.
 	 */
 	public void exportarACSV(List<Articulos> coleccionArticulos) {
+		
 		// Con PrintWriter escribimos en el archivo "articulos.csv"
 		// PrintWriter necesita en el constructor un archivo al que nosotros colocamos
 		// la extension csv

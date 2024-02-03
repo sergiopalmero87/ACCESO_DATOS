@@ -8,7 +8,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		// Paso 1: Establecer conexi�n con la base de datos
+		// Paso 1: Establecer conexion con la base de datos
 				String cadenaConexion = "jdbc:mysql://localhost:3306/Act2_Conectores";
 				String user = "root";
 				String pass = "";

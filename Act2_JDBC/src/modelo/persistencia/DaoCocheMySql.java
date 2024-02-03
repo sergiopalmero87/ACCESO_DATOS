@@ -72,37 +72,36 @@ private Connection conexion;
 	 */
 	@Override
 	public boolean alta(Coche c) {
-		if(!abrirConexion()){
-			return false;
-		}
-		boolean alta = true;
-		
-		String query = "insert into coches (ID,Marca,Year,YearFabricar,Km) "
-				+ " values(?,?,?)";
-		try {
-			//preparamos la query con valores parametrizables(?)
-			PreparedStatement ps = conexion.prepareStatement(query);
-			ps.setInt(1, c.getId());
-			ps.setString(2, c.getMarca());
-			ps.setInt(3, c.getYear());
-			ps.setInt(4, c.getYearFabricar());
-			ps.setDouble(5, c.getKm());
-			
-			
-			int numeroFilasAfectadas = ps.executeUpdate();
-			if(numeroFilasAfectadas == 0) {
-				alta = false;
-			}
-		} catch (SQLException e) {
-			System.out.println("alta -> Error al insertar: " + c);
-			alta = false;
-			e.printStackTrace();
-		} finally{
-			cerrarConexion();
-		}
-		
-		return alta;
+	    if (!abrirConexion()) {
+	        return false;
+	    }
+	    boolean alta = true;
+
+	    String query = "insert into coches (ID, Marca, Year, YearFabricar, Km) values (?, ?, ?, ?, ?)";
+	    try {
+	        // Preparamos la query con valores parametrizables (?)
+	        PreparedStatement ps = conexion.prepareStatement(query);
+	        ps.setInt(1, c.getId());
+	        ps.setString(2, c.getMarca());
+	        ps.setInt(3, c.getYear());
+	        ps.setInt(4, c.getYearFabricar());
+	        ps.setDouble(5, c.getKm());
+
+	        int numeroFilasAfectadas = ps.executeUpdate();
+	        if (numeroFilasAfectadas == 0) {
+	            alta = false;
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("alta -> Error al insertar: " + c);
+	        alta = false;
+	        e.printStackTrace();
+	    } finally {
+	        cerrarConexion();
+	    }
+
+	    return alta;
 	}
+
 	
 	
 	

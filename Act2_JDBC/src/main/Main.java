@@ -3,6 +3,9 @@ package main;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Scanner;
+
+import gestor.GestorCoche;
 
 public class Main {
 
@@ -21,6 +24,12 @@ public class Main {
 					return;
 				}
 				System.out.println("Se ha establecido la conexion con la Base de datos");
+				
+				
+				System.out.println("Bienvenidos a nuestra CRUD de personas");
+				Scanner sc = new Scanner(System.in);
+				boolean fin = false;
+				GestorCoche gc = new GestorCoche();
 				
 		
 	}

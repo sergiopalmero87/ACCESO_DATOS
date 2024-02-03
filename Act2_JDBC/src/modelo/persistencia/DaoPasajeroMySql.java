@@ -13,7 +13,7 @@ import modelo.persistencia.interfaces.DaoPasajero;
 
 
 
-public class DaoPasajeroMysql implements DaoPasajero {
+public class DaoPasajeroMySql implements DaoPasajero {
 
 private Connection conexion;
 	
@@ -40,7 +40,7 @@ private Connection conexion;
 	}*/
 	
 	public boolean abrirConexion(){
-		String url = "jdbc:mysql://localhost:3306/bbdd";
+		String url = "jdbc:mysql://localhost:3306/Act2_Conectores";
 		String usuario = "root";
 		String password = "";
 		try {

@@ -19,7 +19,7 @@ public interface DaoCoche {
 	
 	public Coche listarUnCoche(int idCoche);
 	
-	public Coche modificarCoche(Coche c);
+	public boolean modificarCoche(Coche c);
 
 	public List<Coche> listarTodosLosCoches();
 

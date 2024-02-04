@@ -4,20 +4,20 @@ public class Coche {
 
 	private int id;
 	private String marca;
-	private int year;
-	private int yearFabricar;
+	private String modelo;
+	private int anioFabricacion;
 	private double km;
 
 	public Coche() {
 		super();
 	}
 
-	public Coche(int id, String marca, int year, int yearFabricar, double km) {
+	public Coche(int id, String marca, String modelo, int anioFabricacion, double km) {
 		super();
 		this.id = id;
 		this.marca = marca;
-		this.year = year;
-		this.yearFabricar = yearFabricar;
+		this.modelo = modelo;
+		this.anioFabricacion = anioFabricacion;
 		this.km = km;
 	}
 
@@ -37,20 +37,20 @@ public class Coche {
 		this.marca = marca;
 	}
 
-	public int getYear() {
-		return year;
+	public String getModelo() {
+		return modelo;
 	}
 
-	public void setYear(int year) {
-		this.year = year;
+	public void setModelo(String modelo) {
+		this.modelo = modelo;
 	}
 
-	public int getYearFabricar() {
-		return yearFabricar;
+	public int getAnioFabricacion() {
+		return anioFabricacion;
 	}
 
-	public void setYearFabricar(int yearFabricar) {
-		this.yearFabricar = yearFabricar;
+	public void setAnioFabricacion(int anioFabricacion) {
+		this.anioFabricacion = anioFabricacion;
 	}
 
 	public double getKm() {
@@ -63,8 +63,12 @@ public class Coche {
 
 	@Override
 	public String toString() {
-		return "Coche [id=" + id + ", marca=" + marca + ", year=" + year + ", yearFabricar=" + yearFabricar + ", km="
-				+ km + "]";
+		return "Coche [id=" + id + ", marca=" + marca + ", modelo=" + modelo + ", anioFabricacion=" + anioFabricacion
+				+ ", km=" + km + "]";
 	}
+
+	
+
+	
 
 }

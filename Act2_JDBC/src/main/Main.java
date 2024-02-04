@@ -3,108 +3,284 @@ package main;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import gestor.GestorCoche;
+import gestor.GestorPasajero;
 import modelo.entidad.Coche;
 import modelo.entidad.Pasajero;
 
 public class Main {
 
 	public static void main(String[] args) {
-		
+
 		// Paso 1: Establecer conexion con la base de datos
-				String cadenaConexion = "jdbc:mysql://localhost:3306/Act2_Conectores";
-				String user = "root";
-				String pass = "";
-				Connection con;
-				try {
-					con = DriverManager.getConnection(cadenaConexion, user, pass);
-				} catch (SQLException e) {
-					System.out.println("No se ha podido establecer la conexion con la BD");
-					System.out.println(e.getMessage());
-					return;
+		String cadenaConexion = "jdbc:mysql://localhost:3306/Act2_Conectores";
+		String user = "root";
+		String pass = "";
+		Connection con;
+		try {
+			con = DriverManager.getConnection(cadenaConexion, user, pass);
+		} catch (SQLException e) {
+			System.out.println("No se ha podido establecer la conexion con la BD");
+			System.out.println(e.getMessage());
+			return;
+		}
+		System.out.println("Se ha establecido la conexion con la Base de datos");
+
+		System.out.println("¡¡Bienvenidos a nuestra app de gestión de coches!!");
+		Scanner sc = new Scanner(System.in);
+		GestorCoche gc = new GestorCoche();
+		GestorPasajero gp = new GestorPasajero();
+		int opcion = 0;
+
+		do {
+			menu();
+			opcion = sc.nextInt();
+			sc.nextLine();
+			switch (opcion) {
+			case 1:
+				System.out.println("Introduzca los datos del coche (Marca/Modelo/AnioFabricacion/Km)");
+				System.out.print("Marca: ");
+				String marca = sc.nextLine();
+
+				System.out.print("Modelo: ");
+				String modelo = sc.nextLine();
+				
+				System.out.print("Anio fabricacion: ");
+				int anioFabricacion = sc.nextInt();
+				sc.nextLine();
+
+				System.out.print("Km: ");
+				double km = sc.nextDouble();
+
+				Coche c = new Coche();
+				c.setMarca(marca);
+				c.setModelo(modelo);
+				c.setAnioFabricacion(anioFabricacion);
+				c.setKm(km);
+
+				boolean alta = gc.alta(c);
+				if (alta) {
+					System.out.println("Coche dado de alta en la BBDD");
+				} else {
+					System.out.println("El coche no se ha podido dar de alta en la BBDD");
 				}
-				System.out.println("Se ha establecido la conexion con la Base de datos");
 				
+				break;
+
+			case 2:
+				System.out.println("Introduzca el ID del coche a borrar.");
+				int idCocheBorarr = sc.nextInt();
+				sc.nextLine();
+
+				boolean baja = gc.baja(idCocheBorarr);
+				if (baja == true) {
+					System.out.println("Coche con ID " + idCocheBorarr + " dado de baja");
+				} else {
+					System.out.println("No se ha podido completar la baja.");
+				}
+				break;
+
+			case 3:
+				System.out.println("Introduzca el ID del coche a consultar");
+				int idCocheConsultar = sc.nextInt();
+				sc.nextLine();
+
+				Coche coche = gc.consultaCocheID(idCocheConsultar);
+				if (coche == null) {
+					System.out.println("Coche no encontrado en la base de datos");
+				} else {
+					System.out.println("El coche con id " + idCocheConsultar + " es " + coche);
+				}
+				break;
+
+			case 4:
+				System.out.println("Introduzca todos los datos del nuevo coche.(Se modificará a partir de su ID.)");
+
+				System.out.print("ID: ");
+				int idModificar = sc.nextInt();
+				sc.nextLine();
+
+				System.out.print("Marca: ");
+				String marcaModificiar = sc.nextLine();
+
+				System.out.print("Modelo: ");
+				String modeloModificar = sc.nextLine();
+
+				System.out.print("Year fabricar: ");
+				int anioFabricacionModificar = sc.nextInt();
+				sc.nextLine();
+
+				System.out.print("Km: ");
+				double kmModificar = sc.nextDouble();
+
+				Coche cocheNuevo = new Coche();
+				cocheNuevo.setId(idModificar);
+				cocheNuevo.setMarca(marcaModificiar);
+				cocheNuevo.setModelo(modeloModificar);
+				cocheNuevo.setAnioFabricacion(anioFabricacionModificar);
+				cocheNuevo.setKm(kmModificar);
+
+				boolean modificado = gc.modificarCoche(cocheNuevo);
+
+				if (modificado = true) {
+					System.out.println("Coche modificado en la BBDD");
+				} else {
+					System.out.println("No se ha podido modificar el nuevo coche");
+				}
+				break;
+
+			case 5:
+				List<Coche> listaCoches = new ArrayList<>();
+				listaCoches = gc.listarTodosLosCoches();
+				System.out.println("La lista de coches es: \n" + listaCoches);
+				break;
+
+			case 6:
+				System.out.println("Gestión de pasajeros:");
 				
-				System.out.println("¡¡Bienvenidos a nuestra app de gestión de coches!!");
-				Scanner sc = new Scanner(System.in);
-				boolean fin = false;
-				GestorCoche gc = new GestorCoche();
-				
-				
+				int opcionPasajeros = 0;
 				do {
-					menu();
-					int opcion = sc.nextInt();
+					menuPasajeros();
+					opcionPasajeros = sc.nextInt();
 					sc.nextLine();
-					switch (opcion) {
+					
+					switch(opcionPasajeros) {
 					case 1:
-						System.out.println("Introduzca los datos del coche (Marca/Year/YearFabricar/Km)");
-						System.out.print("Marca: ");
-						String Marca = sc.nextLine();
+						System.out.println("Introduzca los datos del pasajero.");
 						
-						System.out.print("Year: ");
-						int Year = sc.nextInt();
+						System.out.print("ID: ");
+						int idPasajero = sc.nextInt();
 						sc.nextLine();
 						
-						System.out.print("Year fabricar: ");
-						int YearFabricar = sc.nextInt();
+						System.out.print("Name: ");
+						String name = sc.nextLine();
+						
+						System.out.print("Age: ");
+						int age = sc.nextInt();
 						sc.nextLine();
 						
-						System.out.print("Km: ");
-						double Km = sc.nextDouble();
+						System.out.print("Weight: ");
+						double weight = sc.nextDouble();
 						
-						Coche c = new Coche();
-						c.setMarca(Marca);
-						c.setYear(Year);
-						c.setYearFabricar(YearFabricar);
-						c.setKm(Km);
+						Pasajero p = new Pasajero();
+						p.setId(idPasajero);
+						p.setName(name);
+						p.setAge(age);
+						p.setWeight(weight);
 						
-						int alta = gc.alta(c);
-						if(alta == 0) {
-							System.out.println("Coche dado de alta en la BBDD");
-						}else if(alta == 1) {
-							System.out.println("Error de conexión con la BBDD");
-						}else if(alta == 2){
-							System.out.println("El usuario tiene menos de tres carateres");
+						int altaPasajero = gp.alta(p);
+						
+						if (altaPasajero == 0) {
+							System.out.println("Pasajero dado de alta");
+						} else{
+							System.out.println("No se ha podido dar de alta al pasajero");
 						}
 						break;
 						
 					case 2:
-						System.out.println("Introduzca el ID del coche a borrar.");
-						int idCoche = sc.nextInt();
+						System.out.println("Introduzca el id del pasajero a borrar.");
+						
+						System.out.print("ID:");
+						int idPasajeroBorrar = sc.nextInt();
 						sc.nextLine();
 						
-						boolean baja = gc.baja(idCoche);
-						if(baja == true) {
-							System.out.println("Coche con ID " + idCoche + " dado de baja");
-						}else {
+						boolean bajaPasajero = gp.baja(idPasajeroBorrar);
+						if (bajaPasajero == true) {
+							System.out.println("Pasajero con ID " + idPasajeroBorrar + " borrado");
+						} else {
 							System.out.println("No se ha podido completar la baja.");
 						}
 						break;
+						
+					case 3:
+						System.out.println("Introduzca Id del pasajero a consultar.");
+						
+						int idPasajeroConsultar = sc.nextInt();
+						sc.nextLine();
 
-					case 0:
-						fin = true;
+						Pasajero pasajero = gp.obtenerPasajero(idPasajeroConsultar);
+						
+						if (pasajero == null) {
+							System.out.println("Pasajero no encontrado en la base de datos");
+						} else {
+							System.out.println("El pasajero con id " + idPasajeroConsultar + " es " + pasajero);
+						}
 						break;
+						
+					case 4:
+						System.out.println("Listando todos los pasajeros...");
+						List<Pasajero> listaPasajeros = gp.listarTodosLosPasasjeros();
+						System.out.println(listaPasajeros);
+						break;
+						
+					case 5:
+						System.out.println("Introduce Id del coche y del pasajero que quieras añadir");
+						
+						System.out.print("Id coche: ");
+						int idCocheAdd = sc.nextInt();
+						sc.nextLine();
+						
+						System.out.print("Id pasajero: ");
+						int idPasajeroAdd = sc.nextInt();
+						sc.nextLine();
+						
+						boolean add = gp.addPasajeroCoche(idCocheAdd, idPasajeroAdd);
+						
+						if(add == true) {
+							System.out.println("Add");
+						}else {
+							System.out.println("No add");
+						}
+						break;
+						
+					case 8:
+						System.out.println("Saliendo al menu principal...");
+						opcionPasajeros = 7;	
+						
+					default:
+						System.out.println("Elija una opción válida.");
 					}
-				}while(!fin);
-				
-				System.out.println("Fin de programa");
+				} while (opcionPasajeros != 7);
+				break;
 
-			}
+			case 7:
+				opcion = 7;
+				System.out.println("Saliendo del programa. Adiós");
+				break;
 
-			private static void menu() {
-				System.out.println("Elija una opción:");
-				System.out.println("1. Alta coche");
-				System.out.println("2. Borrar coche");
-				System.out.println("3. Consultar coche por ID");
-				System.out.println("4. Modificar coche por ID");
-				System.out.println("5. Listar todos los coches");
-				System.out.println("6. Salir del programa");
+			default:
+				System.out.println("Introduzca una opción válida.\n");
 			}
-				
-		
+		} while (opcion != 7);
+		return;
+
 	}
 
+	private static void menu() {
+		System.out.println("\nElija una opción:");
+		System.out.println("1. Alta coche");
+		System.out.println("2. Borrar coche");
+		System.out.println("3. Consultar coche por ID");
+		System.out.println("4. Modificar coche por ID");
+		System.out.println("5. Listar todos los coches");
+		System.out.println("6. Gestionar los pasajeros");
+		System.out.println("7. Salir del programa");
+	}
 
+	private static void menuPasajeros() {
+		System.out.println("\nElija una opción:");
+		System.out.println("1. Crear pasajero");
+		System.out.println("2. Borrar pasajero por ID");
+		System.out.println("3. Consultar pasajero por ID");
+		System.out.println("4. Listar todos los pasajeros");
+		System.out.println("5. Add pasajero a coche");
+		System.out.println("6. Eliminar pasajero de un coche");
+		System.out.println("7. Listar todos los pasajeros de un coche");
+		System.out.println("8. Volver al menu principal");
+	}
+
+}

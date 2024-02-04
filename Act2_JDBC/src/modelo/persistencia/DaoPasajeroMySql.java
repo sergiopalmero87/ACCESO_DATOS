@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import modelo.entidad.Coche;
 import modelo.entidad.Pasajero;
 import modelo.persistencia.interfaces.DaoPasajero;
 
@@ -72,14 +73,15 @@ private Connection conexion;
 		}
 		boolean alta = true;
 		
-		String query = "insert into personas (NOMBRE,EDAD,PESO) "
-				+ " values(?,?,?)";
+		String query = "insert into pasajeros (ID,Name,Age,Weight) "
+				+ " values(?,?,?,?)";
 		try {
 			//preparamos la query con valores parametrizables(?)
 			PreparedStatement ps = conexion.prepareStatement(query);
-			ps.setString(1, p.getName());
-			ps.setInt(2, p.getAge());
-			ps.setDouble(3, p.getWeight());
+			ps.setInt(1, p.getId());
+			ps.setString(2, p.getName());
+			ps.setInt(3, p.getAge());
+			ps.setDouble(4, p.getWeight());
 			
 			int numeroFilasAfectadas = ps.executeUpdate();
 			if(numeroFilasAfectadas == 0)
@@ -95,6 +97,13 @@ private Connection conexion;
 		return alta;
 	}
 
+	
+	/**
+	 * Método para borrar un pasajero
+	 * 
+	 * @param id Id del pasajero a borrar.
+	 * @return false si no se ha podido borrar, true si se ha borrado con éxito.
+	 */
 	@Override
 	public boolean baja(int id) {
 		if(!abrirConexion()){
@@ -102,10 +111,10 @@ private Connection conexion;
 		}
 		
 		boolean borrado = true;
-		String query = "delete from personas where id = ?";
+		String query = "delete from pasajeros where id = ?";
 		try {
 			PreparedStatement ps = conexion.prepareStatement(query);
-			//sustituimos la primera interrgante por la id
+			//sustituimos la primera interrogante por la id
 			ps.setInt(1, id);
 			
 			int numeroFilasAfectadas = ps.executeUpdate();
@@ -121,16 +130,51 @@ private Connection conexion;
 		}
 		return borrado; 
 	}
+	
+	
+	@Override
+	public Pasajero consultarPasajero(int id) {
+		if(!abrirConexion()){
+			return null;
+		}		
+		Pasajero p = null;
+		
+		String query = "select ID,Name,Age,Weight from pasajeros "
+				+ "where id = ?";
+		try {
+			PreparedStatement ps = conexion.prepareStatement(query);
+			ps.setInt(1, id);
+			
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				p = new Pasajero();
+				p.setId(rs.getInt(1));
+				p.setName(rs.getString(2));
+				p.setAge(rs.getInt(3));
+				p.setWeight(rs.getDouble(4));
+			}
+		} catch (SQLException e) {
+			System.out.println("obtener -> error al obtener el "
+					+ "pasajero con id " + id);
+			e.printStackTrace();
+		} finally {
+			cerrarConexion();
+		}
+		
+		
+		return p;
+		
+	}
 
 
 	@Override
-	public List<Pasajero> listar() {
+	public List<Pasajero> listarTodosPasajeros() {
 		if(!abrirConexion()){
 			return null;
 		}		
 		List<Pasajero> listaPasajeros = new ArrayList<>();
 		
-		String query = "select ID,NOMBRE,EDAD,PESO from personas";
+		String query = "select ID,Name,Age,weight from pasajeros";
 		try {
 			PreparedStatement ps = conexion.prepareStatement(query);
 			
@@ -158,8 +202,30 @@ private Connection conexion;
 	}
 
 	@Override
-	public boolean addPasajeroCoche(int idPasajero, int idCoche) {
-		// TODO Auto-generated method stub
+	public boolean addPasajeroCoche(int idCoche, int idPasajero) {
+		if(!abrirConexion()){
+			return false;
+		}
+		
+		boolean add = true;
+		String query = "INSERT INTO coches_pasajeros (coche_id,pasajero_id) VALUES (?,?)";
+		
+		try {
+			PreparedStatement ps = conexion.prepareStatement(query);
+			
+			ps.setInt(1, idCoche);
+			ps.setInt(2, idPasajero);
+			
+			int filasAfectadas = ps.executeUpdate();
+			
+			if(filasAfectadas == 0) {
+				add = false;
+			}
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
 		return false;
 	}
 
@@ -170,7 +236,7 @@ private Connection conexion;
 	}
 
 	@Override
-	public List<Pasajero> pasajerosCoche(int idCoche) {
+	public List<Pasajero> todosPasajerosCoche(int idCoche) {
 		// TODO Auto-generated method stub
 		return null;
 	}

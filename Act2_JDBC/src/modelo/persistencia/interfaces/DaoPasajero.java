@@ -15,9 +15,10 @@ public interface DaoPasajero {
 	
 		public boolean alta(Pasajero p);
 		public boolean baja(int id);
-		public List<Pasajero> listar();
+		public Pasajero consultarPasajero(int id);
+		public List<Pasajero> listarTodosPasajeros();
 		public boolean addPasajeroCoche(int idPasajero, int idCoche);
 		public boolean deletePasajeroCoche(int idPasajero);
-		public List<Pasajero> pasajerosCoche(int idCoche);
+		public List<Pasajero> todosPasajerosCoche(int idCoche);
 		
 }

@@ -15,28 +15,6 @@ public class DaoCocheMySql implements DaoCoche{
 	
 private Connection conexion;
 	
-	//Bloque estatico, los bloques estaticos son ejecutados
-	//por java JUSTO ANTES de ejecutar el metodo main()
-	//java busca todos los metodos staticos que haya en el programa
-	//y los ejecuta
-	/*
-	static{
-		try {
-			//Esta sentencia carga del jar que hemos importado
-			//una clase que se llama Driver que esta en el paqueta
-			//com.mysql.jdbc. Esta clase se carga previamente en
-			//java para m�s adelante ser llamada
-			//Esto solo es necesario si utilizamos una versi�n java anterior
-			//a la 1.7 ya que desde esta versi�n java busca automaticamente 
-			//los drivers
-			Class.forName("com.mysql.jdbc.Driver");
-			System.out.println("Driver cargado");
-		} catch (ClassNotFoundException e) {
-			System.out.println("Driver NO cargado");
-			e.printStackTrace();
-		}
-	}*/
-	
 	public boolean abrirConexion(){
 		String url = "jdbc:mysql://localhost:3306/Act2_Conectores";
 		String usuario = "root";
@@ -62,14 +40,6 @@ private Connection conexion;
 	}
 	
 	
-
-	
-	/**
-	 * Método que da de alta un coche en la base de datos.
-	 * 
-	 * @param c Coche que damos de alta.
-	 * @return true si el alta se ha hecho con éxito y false en caso de que no se haya podido completar.
-	 */
 	@Override
 	public boolean alta(Coche c) {
 	    if (!abrirConexion()) {
@@ -103,14 +73,6 @@ private Connection conexion;
 	}
 
 	
-	
-	
-	/**
-	 * Método que lista un coche de la base de datos según su ID.
-	 * 
-	 * @param idCoche ID a partir del cual obtenemos el coche.
-	 * @return c coche obtenido tras la búsqueda, null en caso de que no se encuentre nada.
-	 */
 	@Override
 	public Coche listarUnCoche(int idCoche) {
 		if(!abrirConexion()){
@@ -146,13 +108,6 @@ private Connection conexion;
 	}
 
 	
-	
-	/**
-	 * Método que da de baja un coche de la base de datos a partir de su ID
-	 * 
-	 * @param idCoche ID del coche a partir del cual damos de baja.
-	 * @return true si la baja se completó con éxito y false si no se pudo realizar.
-	 */
 	@Override
 	public boolean baja(int idCoche) {
 		if(!abrirConexion()){
@@ -179,12 +134,6 @@ private Connection conexion;
 	}
 
 
-	/**
-	 * Método para modificar un coche segun su ID.
-	 * 
-	 * @param c el coche que contiene la nueva información.
-	 * @return true si la modificacion fue exitosa y false si no se pudo realizar.
-	 */
 	@Override
 	public boolean modificarCoche(Coche c) {
 		if(!abrirConexion()){
@@ -215,12 +164,6 @@ private Connection conexion;
 	}
 
 	
-	
-	/**
-	 * Método para listar todos los coches almacenados en la base de datos.
-	 *
-	 * @return La lista de coches.
-	 */
 	@Override
 	public List<Coche> listarTodosLosCoches() {
 		if(!abrirConexion()){

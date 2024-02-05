@@ -24,7 +24,7 @@ public class Main {
 		try {
 			con = DriverManager.getConnection(cadenaConexion, user, pass);
 		} catch (SQLException e) {
-			System.out.println("No se ha podido establecer la conexion con la BD");
+			System.out.println("No se ha podido establecer la conexion con la BBDD");
 			System.out.println(e.getMessage());
 			return;
 		}
@@ -231,20 +231,51 @@ public class Main {
 						boolean add = gp.addPasajeroCoche(idCocheAdd, idPasajeroAdd);
 						
 						if(add == true) {
-							System.out.println("Add");
+							System.out.println("Pasajero asignado a coche con éxito.");
 						}else {
-							System.out.println("No add");
+							System.out.println("No se ha podido asignar el pasajero al coche.");
+						}
+						break;
+						
+					case 6:
+						System.out.println("Introduce el ID del pasajero para desasignar");
+						
+						System.out.print("ID: ");
+						int idDesasignar = sc.nextInt();
+						sc.nextLine();
+						
+						boolean desasignar = gp.deletePasajeroCoche(idDesasignar);
+						
+						if(desasignar = true) {
+							System.out.println("Pasajero eliminado del coche con éxito.");
+						}else {
+							System.out.println("No se ha podido eliminar al pasajero del coche");
+						}
+						break;
+						
+					case 7:
+						System.out.println("Introduce el ID del coche");
+						System.out.print("ID: ");
+						int idCoche = sc.nextInt();
+						sc.nextLine();
+						
+						List<Pasajero> listaPasajerosCoche = gp.todosPasajerosCoche(idCoche);
+						
+						if(listaPasajerosCoche.isEmpty()) {
+							System.out.println("El coche no tiene ningún pasajero asignado");
+						}else {
+							System.out.println(listaPasajerosCoche);
 						}
 						break;
 						
 					case 8:
 						System.out.println("Saliendo al menu principal...");
-						opcionPasajeros = 7;	
+						opcionPasajeros = 8;	
 						
 					default:
 						System.out.println("Elija una opción válida.");
 					}
-				} while (opcionPasajeros != 7);
+				} while (opcionPasajeros != 8);
 				break;
 
 			case 7:

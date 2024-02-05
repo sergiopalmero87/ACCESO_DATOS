@@ -17,29 +17,7 @@ import modelo.persistencia.interfaces.DaoPasajero;
 public class DaoPasajeroMySql implements DaoPasajero {
 
 private Connection conexion;
-	
-	//Bloque estatico, los bloques estaticos son ejecutados
-	//por java JUSTO ANTES de ejecutar el metodo main()
-	//java busca todos los metodos staticos que haya en el programa
-	//y los ejecuta
-	/*
-	static{
-		try {
-			//Esta sentencia carga del jar que hemos importado
-			//una clase que se llama Driver que esta en el paqueta
-			//com.mysql.jdbc. Esta clase se carga previamente en
-			//java para m�s adelante ser llamada
-			//Esto solo es necesario si utilizamos una versi�n java anterior
-			//a la 1.7 ya que desde esta versi�n java busca automaticamente 
-			//los drivers
-			Class.forName("com.mysql.jdbc.Driver");
-			System.out.println("Driver cargado");
-		} catch (ClassNotFoundException e) {
-			System.out.println("Driver NO cargado");
-			e.printStackTrace();
-		}
-	}*/
-	
+		
 	public boolean abrirConexion(){
 		String url = "jdbc:mysql://localhost:3306/Act2_Conectores";
 		String usuario = "root";
@@ -98,12 +76,6 @@ private Connection conexion;
 	}
 
 	
-	/**
-	 * Método para borrar un pasajero
-	 * 
-	 * @param id Id del pasajero a borrar.
-	 * @return false si no se ha podido borrar, true si se ha borrado con éxito.
-	 */
 	@Override
 	public boolean baja(int id) {
 		if(!abrirConexion()){
@@ -190,8 +162,7 @@ private Connection conexion;
 				listaPasajeros.add(pasajero);
 			}
 		} catch (SQLException e) {
-			System.out.println("listar -> error al obtener las "
-					+ "personas");
+			System.out.println("listar -> error al obtener los pasajeros");
 			e.printStackTrace();
 		} finally {
 			cerrarConexion();
@@ -226,19 +197,70 @@ private Connection conexion;
 			e.printStackTrace();
 		}
 		
-		return false;
+		return add;
 	}
 
 	@Override
 	public boolean deletePasajeroCoche(int idPasajero) {
-		// TODO Auto-generated method stub
-		return false;
+		if(!abrirConexion()){
+			return false;
+		}
+		
+		boolean delete = true;
+		
+		String query = "DELETE FROM coches_pasajeros WHERE pasajero_id = ?";
+		
+		try {
+			PreparedStatement ps = conexion.prepareStatement(query);
+			ps.setInt(1, idPasajero);
+			
+			int filasAfectadas = ps.executeUpdate();
+			
+			if(filasAfectadas == 0) {
+				delete = false;
+			}
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return delete;
 	}
 
 	@Override
 	public List<Pasajero> todosPasajerosCoche(int idCoche) {
-		// TODO Auto-generated method stub
-		return null;
+		if (!abrirConexion()) {
+			return null;
+		}
+
+		List<Pasajero> listaPasajeros = new ArrayList<>();
+
+		//Dame todo from pasajeros con alias p, lo uno con coches_pasajeros con alias cp, con la condicion de que p.id sea = a cp.pasajero_id
+		// donde cp.coche_id sea = al parametro de entrada de la funcion.
+		String query = "SELECT * FROM pasajeros as p INNER JOIN coches_pasajeros as cp ON p.id = cp.pasajero_id WHERE cp.coche_id = ?";
+		try {
+			PreparedStatement ps = conexion.prepareStatement(query);
+			ps.setInt(1, idCoche);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Pasajero pasajero = new Pasajero();
+				pasajero.setId(rs.getInt(1));
+				pasajero.setName(rs.getString(2));
+				pasajero.setAge(rs.getInt(3));
+				pasajero.setWeight(rs.getDouble(4));
+
+				listaPasajeros.add(pasajero);
+			}
+		} catch (SQLException e) {
+			System.out.println("listar -> error al obtener los pasajeros");
+			e.printStackTrace();
+		} finally {
+			cerrarConexion();
+		}
+
+		return listaPasajeros;
+
 	}
 	
 }

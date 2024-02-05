@@ -79,5 +79,25 @@ public class GestorPasajero {
 		boolean add = daoPasajero.addPasajeroCoche(idCoche, idPasajero);
 		return add;
 	}
+	
+	
+	
+	/**
+	 * Método para desasignar un pasajero de un coche.
+	 * 
+	 * @param idPasajero Id del pasajero que queremos desasignar.
+	 * @return true si se completa y false si no.
+	 */
+	public boolean deletePasajeroCoche(int idPasajero) {
+		boolean delete = daoPasajero.deletePasajeroCoche(idPasajero);
+		return delete;
+	}
+	
+	
+	public List<Pasajero> todosPasajerosCoche(int idCoche){
+		List<Pasajero> listaPasajerosCoche = new ArrayList<Pasajero>();
+		listaPasajerosCoche = daoPasajero.todosPasajerosCoche(idCoche);
+		return listaPasajerosCoche;
+	}
 
 }

@@ -1,10 +1,13 @@
 package main;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
 import gestor.GestorCoche;
@@ -13,22 +16,41 @@ import modelo.entidad.Coche;
 import modelo.entidad.Pasajero;
 
 public class Main {
+	
+	private static String url;
+	private static String user;
+	private static String password;
+	private static Connection con;
+	private static Properties properties = new Properties();
 
 	public static void main(String[] args) {
+		
+		//Con FileInputStream creamos vinculo con fichero.
+		//Con el objeto properties cargamos en la variable entrada el contendio del fichero.
+		try (FileInputStream entrada = new FileInputStream("config.properties")) {
+            properties.load(entrada);
 
-		// Paso 1: Establecer conexion con la base de datos
-		String cadenaConexion = "jdbc:mysql://localhost:3306/Act2_Conectores";
-		String user = "root";
-		String pass = "";
-		Connection con;
+            // Obtenemos los valores del archivo properties.
+            url = properties.getProperty("jdbc.url");
+            user= properties.getProperty("jdbc.user");
+            password = properties.getProperty("jdbc.password");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            
+        }
+		
+		//Obtenemos la conexion.
 		try {
-			con = DriverManager.getConnection(cadenaConexion, user, pass);
+			con = DriverManager.getConnection(url, user, password);
 		} catch (SQLException e) {
 			System.out.println("No se ha podido establecer la conexion con la BBDD");
 			System.out.println(e.getMessage());
 			return;
 		}
-		System.out.println("Se ha establecido la conexion con la Base de datos");
+		
+		//La conexion ha sido exitosa.
+		//System.out.println("Se ha establecido la conexion con la Base de datos");
 
 		System.out.println("¡¡Bienvenidos a nuestra app de gestión de coches!!");
 		Scanner sc = new Scanner(System.in);

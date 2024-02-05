@@ -1,5 +1,7 @@
 package modelo.persistencia;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,20 +9,38 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import modelo.entidad.Coche;
 import modelo.persistencia.interfaces.DaoCoche;
 
 public class DaoCocheMySql implements DaoCoche{
 	
-private Connection conexion;
+private Connection con;
+private Properties properties = new Properties();
+private String url, user, password;
 	
 	public boolean abrirConexion(){
-		String url = "jdbc:mysql://localhost:3306/Act2_Conectores";
-		String usuario = "root";
-		String password = "";
+		
+		// Creamos un vinculo con el fichero a traves de la clase FileInputStream en la variable entrada.
+		// En el objeto properties se carga el contenido del fichero.
+		try (FileInputStream entrada = new FileInputStream("config.properties")) {
+            properties.load(entrada);
+
+            // Obtenemos los valores del archivo properties
+            url = properties.getProperty("jdbc.url");
+            user= properties.getProperty("jdbc.user");
+            password = properties.getProperty("jdbc.password");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            
+        }
+		
+		
+		// Con el objeto con, obtenemos la conexion.
 		try {
-			conexion = DriverManager.getConnection(url,usuario,password);
+			con = DriverManager.getConnection(url,user,password);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -29,9 +49,11 @@ private Connection conexion;
 		return true;
 	}
 	
+	
+	// Con el objeto con cerramos la conexion.
 	public boolean cerrarConexion(){
 		try {
-			conexion.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
@@ -47,10 +69,11 @@ private Connection conexion;
 	    }
 	    boolean alta = true;
 
+	    //Inserta en la tabla coches esos valores:
 	    String query = "insert into coches (ID, Marca, Modelo, AnioFabricacion, Km) values (?, ?, ?, ?, ?)";
 	    try {
 	        // Preparamos la query con valores parametrizables (?)
-	        PreparedStatement ps = conexion.prepareStatement(query);
+	        PreparedStatement ps = con.prepareStatement(query);
 	        ps.setInt(1, c.getId());
 	        ps.setString(2, c.getMarca());
 	        ps.setString(3, c.getModelo());
@@ -80,12 +103,14 @@ private Connection conexion;
 		}		
 		Coche c = null;
 		
+		//Dame los valores de la tabla coches donde el id es:
 		String query = "select ID, Marca, Modelo, AnioFabricacion, Km from coches "
 				+ "where id = ?";
 		try {
-			PreparedStatement ps = conexion.prepareStatement(query);
+			PreparedStatement ps = con.prepareStatement(query);
 			ps.setInt(1, idCoche);
 			
+			//Como hacemos un "get" y no introducimos, borramos, actualizamos usamos ResultSet
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
 				c = new Coche();
@@ -115,9 +140,11 @@ private Connection conexion;
 		}
 		
 		boolean borrado = true;
+		
+		//Borra de la tabla coches donde el id es:
 		String query = "delete from coches where id = ?";
 		try {
-			PreparedStatement ps = conexion.prepareStatement(query);
+			PreparedStatement ps = con.prepareStatement(query);
 			//sustituimos la primera interrgante por la id
 			ps.setInt(1, idCoche);
 			
@@ -140,9 +167,10 @@ private Connection conexion;
 			return false;
 		}
 		
+		//Actualiza la tabla coches. Pon esos valores donde el id es:
 		String query = "update coches set Marca=?, Modelo=?, AnioFabricacion=?, Km=? WHERE ID=?";
 		try {
-			PreparedStatement ps = conexion.prepareStatement(query);
+			PreparedStatement ps = con.prepareStatement(query);
 			ps.setString(1, c.getMarca());
 			ps.setString(2, c.getModelo());
 			ps.setInt(3, c.getAnioFabricacion());
@@ -171,10 +199,12 @@ private Connection conexion;
 		}		
 		List<Coche> listaCoches = new ArrayList<>();
 		
+		//Dame todos los valores de la tabla coches:
 		String query = "select ID, Marca, Modelo, AnioFabricacion, Km from coches";
 		try {
-			PreparedStatement ps = conexion.prepareStatement(query);
+			PreparedStatement ps = con.prepareStatement(query);
 			
+			//Como hacemos un "get" y no introducimos, borramos, actualizamos usamos ResultSet
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()){

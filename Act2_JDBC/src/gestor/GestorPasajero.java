@@ -15,10 +15,10 @@ public class GestorPasajero {
 
 	
 	/**
-	 * Método para crear un nuevo pasajero
+	 * Método para crear un nuevo pasajero.
 	 * 
 	 * @param p Pasajero a crear.
-	 * @return 0 si el pasajero es creado con éxito, 1 si no se ha podido crear
+	 * @return 0 si el pasajero es creado con éxito, 1 si no se ha podido crear.
 	 */
 	public int alta(Pasajero p) {
 		boolean alta = daoPasajero.alta(p);
@@ -32,7 +32,7 @@ public class GestorPasajero {
 	
 	
 	/**
-	 * Método para borrar un pasajero
+	 * Método para borrar un pasajero.
 	 * 
 	 * @param id Id del pasajero a borrar.
 	 * @return false si no se ha podido borrar, true si se ha borrado con éxito.
@@ -94,6 +94,12 @@ public class GestorPasajero {
 	}
 	
 	
+	/**
+	 * Método para listar todos los pasajeros que tiene asignado un coche.
+	 * 
+	 * @param idCoche ID del coche el cual queremos saber los pasajeros que tiene asignados.
+	 * @return La lista de pasajeros que tiene el coche.
+	 */
 	public List<Pasajero> todosPasajerosCoche(int idCoche){
 		List<Pasajero> listaPasajerosCoche = new ArrayList<Pasajero>();
 		listaPasajerosCoche = daoPasajero.todosPasajerosCoche(idCoche);

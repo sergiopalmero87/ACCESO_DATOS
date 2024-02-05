@@ -13,7 +13,7 @@ import modelo.persistencia.interfaces.*;
 public class GestorCoche {
 
 	// Aquí podemos jugar con cambiar el dao que queremos usar
-	// podemos usar DaoCocheMySql o DaoPasajeroMySql
+	// podemos usar DaoCocheMySql o DaoPasajeroMySql segun nos convenga.
 	// Gracias a las interfaces solo tenemos que cambiar el objeto
 	private DaoCoche daoCoche = new DaoCocheMySql();
 	

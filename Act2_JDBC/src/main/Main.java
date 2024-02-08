@@ -16,42 +16,42 @@ import modelo.entidad.Coche;
 import modelo.entidad.Pasajero;
 
 public class Main {
-	
-	private static String url;
-	private static String user;
-	private static String password;
+
+	private static String url, user, password;
 	private static Connection con;
 	private static Properties properties = new Properties();
+	private static String fichero = "config.properties";
 
 	public static void main(String[] args) {
-		
-		//Con FileInputStream creamos vinculo con fichero.
-		//Con el objeto properties cargamos en la variable entrada el contendio del fichero.
-		try (FileInputStream entrada = new FileInputStream("config.properties")) {
-            properties.load(entrada);
 
-            // Obtenemos los valores del archivo properties.
-            url = properties.getProperty("jdbc.url");
-            user= properties.getProperty("jdbc.user");
-            password = properties.getProperty("jdbc.password");
+		// Con FileInputStream creamos vinculo con fichero.
+		// Con el objeto properties cargamos en la variable entrada el contendio del
+		// fichero.
+		try (FileInputStream entrada = new FileInputStream(fichero)) {
+			properties.load(entrada);
+		} catch (IOException e) {
+			e.printStackTrace();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            
-        }
+		}
+
+		// Obtenemos la conexion a la bbdd atraves de los datos del fichero y los guardamos en las variables.
+		url = properties.getProperty("jdbc.url");
 		
-		//Obtenemos la conexion.
+		user = properties.getProperty("jdbc.user");
+		
+		password = properties.getProperty("jdbc.password");
+		
+
+		// Obtenemos la conexion.
 		try {
 			con = DriverManager.getConnection(url, user, password);
 		} catch (SQLException e) {
-			System.out.println("No se ha podido establecer la conexion con la BBDD");
-			System.out.println(e.getMessage());
+			System.out.println("No se ha podido establecer la conexion con la BBDD.\n¿Son correctos los datos de acceso?");
 			return;
 		}
-		
-		//La conexion ha sido exitosa.
-		//System.out.println("Se ha establecido la conexion con la Base de datos");
 
+		// La conexion ha sido exitosa.
+		// System.out.println("Se ha establecido la conexion con la Base de datos");
 		System.out.println("¡¡Bienvenidos a nuestra app de gestión de coches!!");
 		Scanner sc = new Scanner(System.in);
 		GestorCoche gc = new GestorCoche();
@@ -70,7 +70,7 @@ public class Main {
 
 				System.out.print("Modelo: ");
 				String modelo = sc.nextLine();
-				
+
 				System.out.print("Anio fabricacion: ");
 				int anioFabricacion = sc.nextInt();
 				sc.nextLine();
@@ -90,7 +90,7 @@ public class Main {
 				} else {
 					System.out.println("El coche no se ha podido dar de alta en la BBDD");
 				}
-				
+
 				break;
 
 			case 2:
@@ -163,53 +163,53 @@ public class Main {
 
 			case 6:
 				System.out.println("Gestión de pasajeros:");
-				
+
 				int opcionPasajeros = 0;
 				do {
 					menuPasajeros();
 					opcionPasajeros = sc.nextInt();
 					sc.nextLine();
-					
-					switch(opcionPasajeros) {
+
+					switch (opcionPasajeros) {
 					case 1:
 						System.out.println("Introduzca los datos del pasajero.");
-						
+
 						System.out.print("ID: ");
 						int idPasajero = sc.nextInt();
 						sc.nextLine();
-						
+
 						System.out.print("Name: ");
 						String name = sc.nextLine();
-						
+
 						System.out.print("Age: ");
 						int age = sc.nextInt();
 						sc.nextLine();
-						
+
 						System.out.print("Weight: ");
 						double weight = sc.nextDouble();
-						
+
 						Pasajero p = new Pasajero();
 						p.setId(idPasajero);
 						p.setName(name);
 						p.setAge(age);
 						p.setWeight(weight);
-						
+
 						int altaPasajero = gp.alta(p);
-						
+
 						if (altaPasajero == 0) {
 							System.out.println("Pasajero dado de alta");
-						} else{
+						} else {
 							System.out.println("No se ha podido dar de alta al pasajero");
 						}
 						break;
-						
+
 					case 2:
 						System.out.println("Introduzca el id del pasajero a borrar.");
-						
+
 						System.out.print("ID:");
 						int idPasajeroBorrar = sc.nextInt();
 						sc.nextLine();
-						
+
 						boolean bajaPasajero = gp.baja(idPasajeroBorrar);
 						if (bajaPasajero == true) {
 							System.out.println("Pasajero con ID " + idPasajeroBorrar + " borrado");
@@ -217,83 +217,83 @@ public class Main {
 							System.out.println("No se ha podido completar la baja.");
 						}
 						break;
-						
+
 					case 3:
 						System.out.println("Introduzca Id del pasajero a consultar.");
-						
+
 						int idPasajeroConsultar = sc.nextInt();
 						sc.nextLine();
 
 						Pasajero pasajero = gp.obtenerPasajero(idPasajeroConsultar);
-						
+
 						if (pasajero == null) {
 							System.out.println("Pasajero no encontrado en la base de datos");
 						} else {
 							System.out.println("El pasajero con id " + idPasajeroConsultar + " es " + pasajero);
 						}
 						break;
-						
+
 					case 4:
 						System.out.println("Listando todos los pasajeros...");
 						List<Pasajero> listaPasajeros = gp.listarTodosLosPasasjeros();
 						System.out.println(listaPasajeros);
 						break;
-						
+
 					case 5:
 						System.out.println("Introduce Id del coche y del pasajero que quieras añadir");
-						
+
 						System.out.print("Id coche: ");
 						int idCocheAdd = sc.nextInt();
 						sc.nextLine();
-						
+
 						System.out.print("Id pasajero: ");
 						int idPasajeroAdd = sc.nextInt();
 						sc.nextLine();
-						
+
 						boolean add = gp.addPasajeroCoche(idCocheAdd, idPasajeroAdd);
-						
-						if(add == true) {
+
+						if (add == true) {
 							System.out.println("Pasajero asignado a coche con éxito.");
-						}else {
+						} else {
 							System.out.println("No se ha podido asignar el pasajero al coche.");
 						}
 						break;
-						
+
 					case 6:
 						System.out.println("Introduce el ID del pasajero para desasignar");
-						
+
 						System.out.print("ID: ");
 						int idDesasignar = sc.nextInt();
 						sc.nextLine();
-						
+
 						boolean desasignar = gp.deletePasajeroCoche(idDesasignar);
-						
-						if(desasignar = true) {
+
+						if (desasignar = true) {
 							System.out.println("Pasajero eliminado del coche con éxito.");
-						}else {
+						} else {
 							System.out.println("No se ha podido eliminar al pasajero del coche");
 						}
 						break;
-						
+
 					case 7:
 						System.out.println("Introduce el ID del coche");
 						System.out.print("ID: ");
 						int idCoche = sc.nextInt();
 						sc.nextLine();
-						
+
 						List<Pasajero> listaPasajerosCoche = gp.todosPasajerosCoche(idCoche);
-						
-						if(listaPasajerosCoche.isEmpty()) {
-							System.out.println("El coche no tiene ningún pasajero asignado");
-						}else {
+
+						if (listaPasajerosCoche.isEmpty()) {
+							System.out.println("El coche no existe o no tiene ningún pasajero asignado");
+						} else {
 							System.out.println(listaPasajerosCoche);
 						}
 						break;
-						
+
 					case 8:
 						System.out.println("Saliendo al menu principal...");
-						opcionPasajeros = 8;	
-						
+						opcionPasajeros = 8;
+
 					default:
 						System.out.println("Elija una opción válida.");
 					}

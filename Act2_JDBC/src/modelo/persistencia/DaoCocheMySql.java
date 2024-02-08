@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+
 import modelo.entidad.Coche;
 import modelo.persistencia.interfaces.DaoCoche;
 
@@ -19,6 +20,7 @@ public class DaoCocheMySql implements DaoCoche{
 private Connection con;
 private Properties properties = new Properties();
 private String url, user, password;
+
 	
 	public boolean abrirConexion(){
 		

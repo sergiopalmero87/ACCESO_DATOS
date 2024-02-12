@@ -5,7 +5,6 @@ import java.util.List;
 
 import modelo.entidad.Coche;
 import modelo.persistencia.DaoCocheMySql;
-import modelo.persistencia.DaoPasajeroMySql;
 import modelo.persistencia.interfaces.*;
 
 //Aquí irian todas las reglas de negocio de nuestra aplicacion, se aplicarían

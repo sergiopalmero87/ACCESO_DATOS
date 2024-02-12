@@ -61,13 +61,19 @@ public class GestorCoche {
 	
 	/**
 	 * Método para modificar un coche de la BBDD. Se solicita toda la información del nuevo coche y se modifica a partir de su ID.
+	 * Si la marca y el modelo no están vacios, se realiza la modificación.
+	 * 
 	 * 
 	 * @param c La información completa del coche que queremos modificar. 
 	 * @return true si se ha modificado y false si no se ha podido modificar.
 	 */
 	public boolean modificarCoche (Coche c) {
-		boolean modificado = daoCoche.modificarCoche(c);
-		return modificado;
+		if (!c.getMarca().isEmpty() && !c.getModelo().isEmpty()) {
+			boolean modificado = daoCoche.modificarCoche(c);
+			return modificado;
+		}
+		return false;
+		
 	}
 	
 	

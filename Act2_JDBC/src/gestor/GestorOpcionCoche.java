@@ -37,7 +37,7 @@ public class GestorOpcionCoche {
 		c.setModelo(modelo);
 		c.setAnioFabricacion(anioFabricacion);
 		c.setKm(km);
-
+		
 		boolean alta = gc.alta(c);
 		if (alta) {
 			System.out.println("Coche dado de alta en la BBDD");

@@ -53,7 +53,7 @@ public class Main {
 			con = DriverManager.getConnection(url, user, password);
 		} catch (SQLException e) {
 			System.out.println(
-					"No se ha podido establecer la conexion con la BBDD.\n¿Son correctos los datos de acceso?");
+					"No se ha podido establecer la conexion con la BBDD.\n¿Son correctos los datos de acceso?\n¿Está activa la BBDD?");
 			return;
 		}
 
@@ -127,7 +127,7 @@ public class Main {
 
 					case 8:
 						System.out.println("Saliendo al menu principal...");
-						opcionPasajeros = 8;
+						break;
 
 					default:
 						System.out.println("Elija una opción válida.");

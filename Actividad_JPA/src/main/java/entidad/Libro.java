@@ -2,11 +2,15 @@ package entidad;
 
 
 
+
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -16,7 +20,7 @@ public class Libro {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	private String name;
 	private double price;
 	
@@ -28,22 +32,20 @@ public class Libro {
 	@JoinColumn(name = "fk_id_autor", referencedColumnName = "id")
 	private Autor autor;
 	
-	@ManyToOne
-	@JoinColumn(name = "fk_id_libreria", referencedColumnName = "id")
+	@ManyToOne()
+	@JoinColumn(name="fk_id_libreria", referencedColumnName="id")
 	private Libreria libreria;
 
 	public Libro() {
 		super();
 	}
 
-	public Libro(int id, String name, double price, Editorial editorial, Autor autor, Libreria libreria) {
+	public Libro(Integer id, String name, double price, Autor autor) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.price = price;
-		this.editorial = editorial;
 		this.autor = autor;
-		this.libreria = libreria;
 	}
 
 	public int getId() {

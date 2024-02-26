@@ -3,12 +3,16 @@ package entidad;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
+
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,21 +26,24 @@ public class Libreria {
 	private String nombreDuenio;
 	private String direccion;
 	
-	@OneToMany(mappedBy = "libreria", cascade = CascadeType.ALL)
-	private List<Libro> coleccionLibros = new ArrayList<>();
+	@ManyToMany(cascade = CascadeType.PERSIST)
+	@JoinTable(name="librerias_libros",
+	   joinColumns= { @JoinColumn(name="fk_id_libreria", referencedColumnName="id") }, 
+	   inverseJoinColumns= { @JoinColumn(name="fk_id_libro", referencedColumnName="id")})
+	private List<Libro> libros = new ArrayList<>();
 
 	public Libreria() {
 		super();
 		
 	}
 
-	public Libreria(int id, String name, String nombreDuenio, String direccion, List<Libro> coleccionLibros) {
+	public Libreria(int id, String name, String nombreDuenio, String direccion, List<Libro> libros) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.nombreDuenio = nombreDuenio;
 		this.direccion = direccion;
-		this.coleccionLibros = coleccionLibros;
+		this.libros = libros;
 	}
 
 	public int getId() {
@@ -71,18 +78,18 @@ public class Libreria {
 		this.direccion = direccion;
 	}
 
-	public List<Libro> getColeccionLibros() {
-		return coleccionLibros;
+	public List<Libro> getLibros() {
+		return libros;
 	}
 
-	public void setColeccionLibros(List<Libro> coleccionLibros) {
-		this.coleccionLibros = coleccionLibros;
+	public void setLibros(List<Libro> libros) {
+		this.libros = libros;
 	}
 
 	@Override
 	public String toString() {
 		return "Libreria [id=" + id + ", name=" + name + ", nombreDuenio=" + nombreDuenio + ", direccion=" + direccion
-				+ ", coleccionLibros=" + coleccionLibros + "]";
+				+ ", libros=" + libros + "]";
 	}
 	
 	

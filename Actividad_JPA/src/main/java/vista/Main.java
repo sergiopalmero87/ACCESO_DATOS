@@ -15,12 +15,12 @@ public class Main {
 
 	private static GestorAutor ga = new GestorAutor();
 	private static GestorEditorial ge = new GestorEditorial();
-	private static List<Libro> coleccionLibros = new ArrayList<Libro>();
-
+	private static List<Libro> libros = new ArrayList<Libro>();
+	private static Scanner sc = new Scanner(System.in);
+	
+	
 	public static void main(String[] args) {
 
-		Scanner sc = new Scanner(System.in);
-		
 		System.out.println("Bienvenidos a nuestro programa");
 		
 		addAutor();
@@ -56,6 +56,7 @@ public class Main {
 		
 		do {
 			Autor a = new Autor();
+			Libro l = new Libro();
 			Scanner sc = new Scanner(System.in);
 
 			System.out.println("Agregue autor");
@@ -74,7 +75,8 @@ public class Main {
 			a.setName(nombre);
 			a.setApellidos(apellido);
 			a.setBorn(fechaNacimiento);
-			a.setColeccionLibros(coleccionLibros);
+			
+			
 			
 			boolean agregarAutor = ga.agregar(a);
 			if (agregarAutor) {
@@ -83,6 +85,7 @@ public class Main {
 				System.out.println("El usuario no se ha agregado");
 			}
 			contador --;
+			System.out.println(contador);
 			
 		}while (contador > 0);
 		

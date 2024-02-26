@@ -29,7 +29,7 @@ public class Autor {
 	private Date born;
 	
 	@OneToMany(mappedBy = "autor", cascade = CascadeType.ALL)
-	private List<Libro> coleccionLibros = new ArrayList<>();
+	private List<Libro> libros = new ArrayList<>();
 	
 	
 	public Autor() {
@@ -37,15 +37,13 @@ public class Autor {
 	}
 
 
-	public Autor(int id, String name, String apellidos, Date born, List<Libro> coleccionLibros) {
+	public Autor(Integer id, String name, String apellidos, Date born) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.apellidos = apellidos;
 		this.born = born;
-		this.coleccionLibros = coleccionLibros;
 	}
-
 
 	public int getId() {
 		return id;
@@ -87,20 +85,20 @@ public class Autor {
 	}
 
 
-	public List<Libro> getColeccionLibros() {
-		return coleccionLibros;
+	public List<Libro> getLibros() {
+		return libros;
 	}
 
 
-	public void setColeccionLibros(List<Libro> coleccionLibros) {
-		this.coleccionLibros = coleccionLibros;
+	public void setLibros(List<Libro> libros) {
+		this.libros = libros;
 	}
 
 
 	@Override
 	public String toString() {
 		return "Autor [id=" + id + ", name=" + name + ", apellidos=" + apellidos + ", born=" + born
-				+ ", coleccionLibros=" + coleccionLibros + "]";
+				+ ", libros=" + libros + "]";
 	}
 
 

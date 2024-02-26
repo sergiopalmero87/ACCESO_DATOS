@@ -3,6 +3,7 @@ package gestor;
 import java.util.List;
 
 import entidad.Autor;
+import entidad.Libro;
 import persistencia.DaoAutorJPA;
 import persistencia.interfaz.DaoAutor;
 
@@ -30,6 +31,9 @@ public class GestorAutor {
 	
 	public List<Autor> autoresLibros(){
 		List<Autor> lista = daoAutor.autoresLibros();
+		for(Autor a : lista) {
+			System.out.println(a);
+		}
 		return lista;
 		
 	}

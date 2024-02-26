@@ -3,6 +3,7 @@ package entidad;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +22,7 @@ public class Libreria {
 	private String nombreDuenio;
 	private String direccion;
 	
-	@OneToMany(mappedBy = "libreria")
+	@OneToMany(mappedBy = "libreria", cascade = CascadeType.ALL)
 	private List<Libro> coleccionLibros = new ArrayList<>();
 
 	public Libreria() {

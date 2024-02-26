@@ -1,12 +1,19 @@
 package entidad;
 
 
-import java.time.LocalDate;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,7 +24,12 @@ public class Autor {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String name, apellidos;
-	private LocalDate born;
+	
+	@Temporal(TemporalType.DATE)
+	private Date born;
+	
+	@OneToMany(mappedBy = "autor", cascade = CascadeType.ALL)
+	private List<Libro> coleccionLibros = new ArrayList<>();
 	
 	
 	public Autor() {
@@ -25,12 +37,13 @@ public class Autor {
 	}
 
 
-	public Autor(int id, String name, String apellidos, LocalDate born) {
+	public Autor(int id, String name, String apellidos, Date born, List<Libro> coleccionLibros) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.apellidos = apellidos;
 		this.born = born;
+		this.coleccionLibros = coleccionLibros;
 	}
 
 
@@ -64,20 +77,34 @@ public class Autor {
 	}
 
 
-	public LocalDate getBorn() {
+	public Date getBorn() {
 		return born;
 	}
 
 
-	public void setBorn(LocalDate born) {
+	public void setBorn(Date born) {
 		this.born = born;
+	}
+
+
+	public List<Libro> getColeccionLibros() {
+		return coleccionLibros;
+	}
+
+
+	public void setColeccionLibros(List<Libro> coleccionLibros) {
+		this.coleccionLibros = coleccionLibros;
 	}
 
 
 	@Override
 	public String toString() {
-		return "Autor [id=" + id + ", name=" + name + ", apellidos=" + apellidos + ", born=" + born + "]";
+		return "Autor [id=" + id + ", name=" + name + ", apellidos=" + apellidos + ", born=" + born
+				+ ", coleccionLibros=" + coleccionLibros + "]";
 	}
+
+
+	
 	
 
 	

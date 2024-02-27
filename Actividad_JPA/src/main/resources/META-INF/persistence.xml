@@ -21,7 +21,7 @@
 			tablas desde cero.
 			update -> para solamente refrescar las tablas en caso de cambios de anotaciones
 			 -->
-			<property name="javax.persistence.schema-generation.database.action" value="create"/>
+			<property name="javax.persistence.schema-generation.database.action" value="update"/>
 
 						 
 			<!-- Mostrar trazas de sql y establecer dialecto con hibernate -->

@@ -4,6 +4,8 @@ package entidad;
 
 
 
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,34 +27,33 @@ public class Libro {
 	private double price;
 	
 	@ManyToOne()
-	@JoinColumn(name="fk_id_editorial", referencedColumnName="id")
+	@JoinColumn(name = "fk_id_editorial", referencedColumnName = "id")
 	private Editorial editorial;
 	
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name = "fk_id_autor", referencedColumnName = "id")
 	private Autor autor;
 	
-	@ManyToOne()
-	@JoinColumn(name="fk_id_libreria", referencedColumnName="id")
-	private Libreria libreria;
+	@ManyToMany(mappedBy = "libros", cascade = CascadeType.PERSIST)
+	private List<Libreria> librerias;
 
 	public Libro() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
 
-	public Libro(Integer id, String name, double price, Autor autor) {
+	public Libro(Integer id, String name, double price) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.price = price;
-		this.autor = autor;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -88,19 +89,27 @@ public class Libro {
 		this.autor = autor;
 	}
 
-	public Libreria getLibreria() {
-		return libreria;
+	
+	public List<Libreria> getLibrerias() {
+		return librerias;
 	}
 
-	public void setLibreria(Libreria libreria) {
-		this.libreria = libreria;
+	public void setLibrerias(List<Libreria> librerias) {
+		this.librerias = librerias;
 	}
 
 	@Override
 	public String toString() {
 		return "Libro [id=" + id + ", name=" + name + ", price=" + price + ", editorial=" + editorial + ", autor="
-				+ autor + ", libreria=" + libreria + "]";
+				+ autor + ", librerias=" + librerias + "]";
 	}
+
+	
+	
+
+	
+
+	
 	
 	
 	

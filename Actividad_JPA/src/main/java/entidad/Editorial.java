@@ -28,12 +28,12 @@ public class Editorial {
 		super();
 	}
 
-	public Editorial(int id, String name, String direccion, List<Libro> libros) {
+	public Editorial(int id, String name, String direccion) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.direccion = direccion;
-		this.libros = libros;
+		
 	}
 
 	public int getId() {
@@ -60,19 +60,14 @@ public class Editorial {
 		this.direccion = direccion;
 	}
 
-	public List<Libro> getLibros() {
-		return libros;
-	}
-
-	public void setLibros(List<Libro> libros) {
-		this.libros = libros;
-	}
-
 	@Override
 	public String toString() {
-		return "Editorial [id=" + id + ", name=" + name + ", direccion=" + direccion + ", libros="
-				+ libros + "]";
+		return "Editorial [id=" + id + ", name=" + name + ", direccion=" + direccion + ", libros=" + libros + "]";
 	}
+
+
+
+	
 	
 	
 	

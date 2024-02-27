@@ -1,6 +1,6 @@
 package entidad;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import jakarta.persistence.JoinColumn;
@@ -21,23 +21,25 @@ public class Libreria {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	private String name;
 	private String nombreDuenio;
 	private String direccion;
 	
 	@ManyToMany(cascade = CascadeType.PERSIST)
-	@JoinTable(name="librerias_libros",
-	   joinColumns= { @JoinColumn(name="fk_id_libreria", referencedColumnName="id") }, 
-	   inverseJoinColumns= { @JoinColumn(name="fk_id_libro", referencedColumnName="id")})
-	private List<Libro> libros = new ArrayList<>();
+    @JoinTable(name = "libreria_libro",
+               joinColumns = @JoinColumn(name = "libreria_id"),
+               inverseJoinColumns = @JoinColumn(name = "libro_id"))
+    private List<Libro> libros;
 
 	public Libreria() {
 		super();
 		
 	}
 
-	public Libreria(int id, String name, String nombreDuenio, String direccion, List<Libro> libros) {
+	
+
+	public Libreria(Integer id, String name, String nombreDuenio, String direccion, List<Libro> libros) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -45,6 +47,8 @@ public class Libreria {
 		this.direccion = direccion;
 		this.libros = libros;
 	}
+
+
 
 	public int getId() {
 		return id;
@@ -77,6 +81,8 @@ public class Libreria {
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
 	}
+	
+	
 
 	public List<Libro> getLibros() {
 		return libros;
@@ -91,6 +97,8 @@ public class Libreria {
 		return "Libreria [id=" + id + ", name=" + name + ", nombreDuenio=" + nombreDuenio + ", direccion=" + direccion
 				+ ", libros=" + libros + "]";
 	}
+
+	
 	
 	
 

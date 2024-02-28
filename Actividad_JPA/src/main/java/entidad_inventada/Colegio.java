@@ -16,7 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 import jakarta.persistence.Table;
-import modelo.entidad.Direccion;
+
 
 @Entity
 @Table(name = "colegio")

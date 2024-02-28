@@ -67,7 +67,7 @@ public class Main {
 		Autor a3 = new Autor(null, "India", "Palmero De Vicente", null);
 		String fechaNacimientoStr3 = "2020-02-15";
 		Date fechaNacimiento3 = Date.valueOf(fechaNacimientoStr3);
-		a1.setBorn(fechaNacimiento3);
+		a3.setBorn(fechaNacimiento3);
 
 		boolean agregarAutor3 = ga.agregar(a3);
 		if (agregarAutor3) {

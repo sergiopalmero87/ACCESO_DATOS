@@ -1,6 +1,10 @@
 package persistencia;
 
+
+import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.persistence.Query;
 
 import entidad.Libro;
 import jakarta.persistence.EntityManager;
@@ -52,15 +56,47 @@ public class DaoLibroJPA implements DaoLibro {
 	}
 
 	@Override
-	public List<Libro> librosEditoralAutor() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Libro> getLibrosConEditoralYAutor() {
+		if (!abrirConexion()) {
+			return null;
+		}
+		
+		List<Libro> lista = new ArrayList<>();
+		Query query = em.createQuery("SELECT l FROM Libro l LEFT JOIN l.autor LEFT JOIN l.editorial");
+	    
+		try {
+			lista = (List<Libro>)query.getResultList();
+			
+			for(Libro l : lista) {
+				System.out.println(l);
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
 	}
 
 	@Override
-	public List<Libro> librosLibreria() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Libro> getlibrosYLibreria() {
+		if (!abrirConexion()) {
+			return null;
+		}
+		List<Libro> lista = new ArrayList<>();
+		Query query = em.createQuery("SELECT l FROM Libro l LEFT JOIN l.librerias");
+		try {
+			lista = (List<Libro>)query.getResultList();
+			
+			for(Libro l : lista) {
+				System.out.println(l);
+			}
+			
+		} catch(Exception e){
+			return null;
+		}
+		return lista;
 	}
-
+	
+	
+	
 }

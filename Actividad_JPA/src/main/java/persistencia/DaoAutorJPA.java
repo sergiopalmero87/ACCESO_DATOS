@@ -60,13 +60,17 @@ public class DaoAutorJPA implements DaoAutor {
 
 		List<Autor> lista = new ArrayList<>();
 		// para hacer la consulta debemos de usar JPQL
-		Query query = em.createQuery("SELECT DISTINCT a FROM Autor a JOIN FETCH a.libro", Autor.class);
+		Query query = em.createQuery("SELECT a FROM Autor a LEFT JOIN a.libros");
 		try {
 			lista = (List<Autor>) query.getResultList();
-			return lista;
+			
+			for(Autor a : lista) {
+				System.out.println(a);
+			}
 		} catch (Exception e) {
-			return null;
+			e.printStackTrace();
 		}
+		return lista;
 	}
 
 	

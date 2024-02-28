@@ -8,6 +8,7 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -101,8 +102,7 @@ public class Libro {
 
 	@Override
 	public String toString() {
-		return "Libro [id=" + id + ", name=" + name + ", price=" + price + ", editorial=" + editorial + ", autor="
-				+ autor + ", librerias=" + librerias + "]";
+		return "Libro [id=" + id + ", name=" + name + ", price=" + price + "]";
 	}
 
 	

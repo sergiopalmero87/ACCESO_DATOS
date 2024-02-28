@@ -30,12 +30,7 @@ public class GestorAutor {
 	
 	
 	public List<Autor> autoresLibros(){
-		List<Autor> lista = daoAutor.autoresLibros();
-		for(Autor a : lista) {
-			System.out.println(a);
-		}
-		return lista;
-		
+		return daoAutor.autoresLibros();
 	}
 		
 	}

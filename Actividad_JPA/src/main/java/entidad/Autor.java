@@ -97,15 +97,10 @@ public class Autor {
 
 	@Override
 	public String toString() {
-		return "Autor [id=" + id + ", name=" + name + ", apellidos=" + apellidos + ", born=" + born
-				+ ", libros=" + libros + "]";
+		return "Autor [id=" + id + ", name=" + name + ", apellidos=" + apellidos + ", born=" + born + ", libros="
+				+ libros + "]";
 	}
 
 
-	
-	
-
-	
-	
 	
 }

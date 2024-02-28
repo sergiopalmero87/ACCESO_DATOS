@@ -40,65 +40,68 @@ public class Libreria {
 	}
 
 
-	public Libreria(Integer id, String name, String nombreDuenio, String direccion, List<Libro> libros) {
+	public Libreria(Integer id, String name, String nombreDuenio, String direccion) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.nombreDuenio = nombreDuenio;
 		this.direccion = direccion;
-		this.libros = libros;
+
 	}
 
-
-
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+
+	public void setId(Integer id) {
 		this.id = id;
 	}
+
 
 	public String getName() {
 		return name;
 	}
 
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 
 	public String getNombreDuenio() {
 		return nombreDuenio;
 	}
 
+
 	public void setNombreDuenio(String nombreDuenio) {
 		this.nombreDuenio = nombreDuenio;
 	}
+
 
 	public String getDireccion() {
 		return direccion;
 	}
 
+
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
 	}
-	
-	
+
 
 	public List<Libro> getLibros() {
 		return libros;
 	}
 
-	public void setLibros(List<Libro> librosLibreria2) {
-		this.libros = librosLibreria2;
+
+	public void setLibros(List<Libro> libros) {
+		this.libros = libros;
 	}
+
 
 	@Override
 	public String toString() {
-		return "Libreria [id=" + id + ", name=" + name + ", nombreDuenio=" + nombreDuenio + ", direccion=" + direccion
-				+ ", libros=" + libros + "]";
+	    return "Libreria [id=" + id + ", name=" + name + ", nombreDuenio=" + nombreDuenio + ", direccion=" + direccion + "]";
 	}
-
-	
 
 }

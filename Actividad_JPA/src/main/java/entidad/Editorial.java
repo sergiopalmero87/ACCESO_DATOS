@@ -79,14 +79,7 @@ public class Editorial {
 
 	@Override
 	public String toString() {
-		return "Editorial [id=" + id + ", name=" + name + ", direccion=" + direccion + ", libros=" + libros + "]";
+	    return "Editorial [id=" + id + ", name=" + name + ", direccion=" + direccion + "]";
 	}
-
-
-
-	
-	
-	
-	
 
 }

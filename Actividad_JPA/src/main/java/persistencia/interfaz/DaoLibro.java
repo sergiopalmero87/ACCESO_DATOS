@@ -8,8 +8,8 @@ public interface DaoLibro {
 	
 	public boolean agregar(Libro libro);
 	
-	public List<Libro> librosEditoralAutor();
+	public List<Libro> getLibrosConEditoralYAutor();
 	
-	public List<Libro> librosLibreria();
+	public List<Libro> getlibrosYLibreria();
 
 }

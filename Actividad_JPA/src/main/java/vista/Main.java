@@ -30,10 +30,24 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		autorAdd();
+		/**autorAdd();
 		editorialAdd();
 		libroAdd();
 		libreriaAdd();
+		**/
+		
+		/**System.out.println("==============Libros con editorial y autor===============");
+		gl.getlibrosConEditorialYAutor();
+		System.out.println("\n\n\n");**/
+		
+		/**System.out.println("==============Libros y las librerias===============");
+		gl.getlibrosYLibreria();
+		System.out.println("\n\n\n");**/
+		
+		System.out.println("\n\n\n");
+		System.out.println("Autores con libros");
+		ga.autoresLibros();
+		
 
 
 	}
@@ -81,7 +95,7 @@ public class Main {
 	
 	private static void editorialAdd() {
 
-		Editorial e = new Editorial(null, "Editorial1", "Direccion1");
+		Editorial e = new Editorial(null, "Editorial 1", "Direccion 1");
 		e.setLibros(libros);
 
 		boolean agregarEditorial = ge.agregar(e);
@@ -91,7 +105,7 @@ public class Main {
 			System.out.println("La editorial 1 no se ha agregado");
 		}
 
-		Editorial e2 = new Editorial(null, "Editorial2", "Direccion2");
+		Editorial e2 = new Editorial(null, "Editorial 2", "Direccion 2");
 		e.setLibros(libros);
 
 		boolean agregarEditorial2 = ge.agregar(e2);
@@ -112,7 +126,7 @@ public class Main {
 		Editorial e1 = em.find(Editorial.class, 1);
 		Editorial e2 = em.find(Editorial.class, 2);
 
-		Libro l1 = new Libro(null, "Libro1", 12);
+		Libro l1 = new Libro(null, "Libro 1", 12);
 		l1.setAutor(a1);
 		l1.setEditorial(e1);
 		a1.setLibros(libros);
@@ -126,7 +140,7 @@ public class Main {
 
 		}
 		
-		Libro l2 = new Libro(null, "Libro2", 12);
+		Libro l2 = new Libro(null, "Libro 2", 12);
 		l2.setAutor(a1);
 		l2.setEditorial(e1);
 		a1.setLibros(libros);
@@ -140,7 +154,7 @@ public class Main {
 
 		}
 		
-		Libro l3 = new Libro(null, "Libro3", 12);
+		Libro l3 = new Libro(null, "Libro 3", 12);
 		l3.setAutor(a2);
 		l3.setEditorial(e2);
 
@@ -152,7 +166,7 @@ public class Main {
 
 		}
 		
-		Libro l4 = new Libro(null, "Libro4", 12);
+		Libro l4 = new Libro(null, "Libro 4", 12);
 		l4.setAutor(a2);
 		l4.setEditorial(e2);
 
@@ -164,7 +178,7 @@ public class Main {
 
 		}
 		
-		Libro l5 = new Libro(null, "Libro5", 12);
+		Libro l5 = new Libro(null, "Libro 5", 12);
 		l5.setAutor(a3);
 		l5.setEditorial(e1);
 
@@ -176,7 +190,7 @@ public class Main {
 
 		}
 		
-		Libro l6 = new Libro(null, "Libro6", 12);
+		Libro l6 = new Libro(null, "Libro 6", 12);
 		l6.setAutor(a3);
 		l6.setEditorial(e1);
 
@@ -188,7 +202,7 @@ public class Main {
 
 		}
 		
-		Libro l7 = new Libro(null, "Libro7", 12);
+		Libro l7 = new Libro(null, "Libro 7", 12);
 		l7.setAutor(a1);
 		l7.setEditorial(e2);
 
@@ -200,7 +214,7 @@ public class Main {
 
 		}
 		
-		Libro l8 = new Libro(null, "Libro8", 12);
+		Libro l8 = new Libro(null, "Libro 8", 12);
 		l8.setAutor(a2);
 		l8.setEditorial(e1);
 
@@ -226,8 +240,8 @@ public class Main {
 	    Libro l7 = em.find(Libro.class, 7);
 	    Libro l8 = em.find(Libro.class, 8);
 
-	    Libreria lib1 = new Libreria(null, "l1", "d1", "dir1", null);
-	    Libreria lib2 = new Libreria(null, "l2", "d2", "dir2", null);
+	    Libreria lib1 = new Libreria(null, "libreria 1", "director 1", "direccion 1");
+	    Libreria lib2 = new Libreria(null, "libreria 2", "director 2", "direccion 2");
 
 	    List<Libro> librosLibreria1 = new ArrayList<>();
 	    librosLibreria1.add(l1);

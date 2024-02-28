@@ -1,5 +1,7 @@
 package gestor;
 
+import java.util.List;
+
 import entidad.Libro;
 import persistencia.DaoLibroJPA;
 import persistencia.interfaz.DaoLibro;
@@ -17,6 +19,14 @@ public class GestorLibro {
 		}else {
 			return false;
 		}
+	}
+	
+	public List<Libro> getlibrosYLibreria(){
+		return daoLibro.getlibrosYLibreria();
+	}
+	
+	public List<Libro> getlibrosConEditorialYAutor(){
+		return daoLibro.getLibrosConEditoralYAutor();
 	}
 
 }

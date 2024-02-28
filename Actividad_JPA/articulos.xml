@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<articulos>
+    <Lista_de_articulos>
+        <articulo id="1">
+            <name>Articulo 1</name>
+            <description>Descripcion 1</description>
+            <precio>10.0</precio>
+            <stock>2</stock>
+        </articulo>
+        <articulo id="2">
+            <name>Articulo 2</name>
+            <description>Descripcion 2</description>
+            <precio>10.0</precio>
+            <stock>4</stock>
+        </articulo>
+        <articulo id="3">
+            <name>Articulo 3</name>
+            <description>Descripcion 3</description>
+            <precio>10.0</precio>
+            <stock>6</stock>
+        </articulo>
+        <articulo id="4">
+            <name>Articulo 4</name>
+            <description>Descripcion 4</description>
+            <precio>10.0</precio>
+            <stock>8</stock>
+        </articulo>
+    </Lista_de_articulos>
+</articulos>

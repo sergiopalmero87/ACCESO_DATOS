@@ -8,7 +8,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,18 +20,18 @@ public class Editorial {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	private String name;
 	private String direccion;
 	
-	@ManyToMany(mappedBy = "editorial", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "editorial", cascade = CascadeType.ALL)
 	private List<Libro> libros = new ArrayList<>();
 
 	public Editorial() {
 		super();
 	}
 
-	public Editorial(int id, String name, String direccion) {
+	public Editorial(Integer id, String name, String direccion) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -58,6 +61,20 @@ public class Editorial {
 
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
+	}
+	
+	
+
+	public List<Libro> getLibros() {
+		return libros;
+	}
+
+	public void setLibros(List<Libro> libros) {
+		this.libros = libros;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	@Override

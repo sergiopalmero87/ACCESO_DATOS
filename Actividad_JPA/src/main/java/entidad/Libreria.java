@@ -3,15 +3,17 @@ package entidad;
 
 import java.util.List;
 
+
+
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
-
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+
+
 
 import jakarta.persistence.Table;
 
@@ -26,10 +28,10 @@ public class Libreria {
 	private String nombreDuenio;
 	private String direccion;
 	
-	@ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(name = "libreria_libro",
-               joinColumns = @JoinColumn(name = "libreria_id"),
-               inverseJoinColumns = @JoinColumn(name = "libro_id"))
+	@ManyToMany
+	@JoinTable(name="libreria_libros",
+			   joinColumns= { @JoinColumn(name="fk_id_libreria", referencedColumnName="id") }, 
+			   inverseJoinColumns= { @JoinColumn(name="fk_id_libro", referencedColumnName="id")})
     private List<Libro> libros;
 
 	public Libreria() {
@@ -37,7 +39,6 @@ public class Libreria {
 		
 	}
 
-	
 
 	public Libreria(Integer id, String name, String nombreDuenio, String direccion, List<Libro> libros) {
 		super();
@@ -88,8 +89,8 @@ public class Libreria {
 		return libros;
 	}
 
-	public void setLibros(List<Libro> libros) {
-		this.libros = libros;
+	public void setLibros(List<Libro> librosLibreria2) {
+		this.libros = librosLibreria2;
 	}
 
 	@Override
@@ -98,8 +99,6 @@ public class Libreria {
 				+ ", libros=" + libros + "]";
 	}
 
-	
-	
 	
 
 }

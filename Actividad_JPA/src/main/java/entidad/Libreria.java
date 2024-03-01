@@ -101,7 +101,11 @@ public class Libreria {
 
 	@Override
 	public String toString() {
-	    return "Libreria [id=" + id + ", name=" + name + ", nombreDuenio=" + nombreDuenio + ", direccion=" + direccion + "]";
+		return "Libreria [id=" + id + ", name=" + name + ", nombreDuenio=" + nombreDuenio + ", direccion=" + direccion
+				+ "]";
 	}
+
+
+	
 
 }

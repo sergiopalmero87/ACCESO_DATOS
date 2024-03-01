@@ -1,12 +1,15 @@
 package persistencia;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import entidad.Autor;
 import entidad.Libreria;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
+import jakarta.persistence.Query;
 import persistencia.interfaz.DaoLibreria;
 
 public class DaoLibreriaJPA implements DaoLibreria {
@@ -52,8 +55,23 @@ public class DaoLibreriaJPA implements DaoLibreria {
 
 	@Override
 	public List<Libreria> libreriasLibro() {
-		// TODO Auto-generated method stub
-		return null;
+		if (!abrirConexion()) {
+			return null;
+		}
+		
+		List<Libreria> lista = new ArrayList<>();
+		// para hacer la consulta debemos de usar JPQL
+		Query query = em.createQuery("SELECT l from Libreria l left join l.libros");
+		try {
+			lista = (List<Libreria>) query.getResultList();
+			
+			for(Libreria l : lista) {
+				System.out.println(l);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
 	}
 
 }

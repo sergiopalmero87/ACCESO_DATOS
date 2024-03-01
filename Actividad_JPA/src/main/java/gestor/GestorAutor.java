@@ -29,6 +29,10 @@ public class GestorAutor {
 		}
 	
 	
+	/**
+	 * Método que sirve para obtener los autores con sus libros
+	 * @return Devuelve una lista con los autores y sus libros asociados
+	 */
 	public List<Autor> autoresLibros(){
 		return daoAutor.autoresLibros();
 	}
